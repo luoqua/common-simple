@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>common-simple</title>
+  </head>
+  <body>
+    <div id="app"></div>
+
+
+    <div id="form">
+    	<input type="text" name="" class="use_district">
+    	<input type="number" name=""  class="user_phone">
+    	<button id="btn"></button>
+    </div>
+    <!-- built files will be auto injected -->
+    <script type="text/javascript" src="static/lInput.js"></script>
+    <script type="text/javascript" src="static/promise_demo.js"></script>
+    <script type="text/javascript">
+var options = {
+	parent: 'form',
+	selectType: 'id', // 支持class、name 的选择
+	btn: 'btn',
+	needfields: [
+		{
+			fieldName: 'phone',
+			isRequired: true,
+			Regxp: '',
+			err_null_msg: '请填写您的号码',
+			err_rxp_msg: '请填写正确的手机号码'
+		},
+		{
+			fieldName: 'district',
+			isRequired: true,
+			Regxp: '',
+			err_null_msg: '请填写您的装修地址',
+			err_rxp_msg: '请填写正确的装修地址'
+		}
+	],
+	formfields: {
+		phone: '.user_phone',
+		district: '.user_district'
+	},
+	hostApi: 'asdasd'
+}
+
+
+new window.LInput(options)
+
+
+
+var p2 = new Promise(function(resolve, reject) {
+  resolve(1);
+});
+
+p2.then(function(value) {
+  console.log(value); // 1
+  return value + 1;
+}).then(function(value) {
+  console.log(value + "- This synchronous usage is virtually pointless"); // 2- This synchronous usage is virtually pointless
+});
+
+
+
+
+
+    </script>
+  </body>
+</html>
