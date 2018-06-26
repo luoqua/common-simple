@@ -173,7 +173,7 @@
 
 	function setTimeoutPromise(promise,flag){
 
-		if( promise._status === "pending"){
+		if( promise._status === Status.PENDING){
 			return false;
 		}
 
@@ -182,24 +182,30 @@
 		var value = promise._value;
 		
 		
-		if (stack.length > 0) {
+		if (stack.length === 1) {
 
 			setTimeout(function(){
 
-				function next(value){			
+				function next(stack){			
 
-
-							var fn = stack.shift()
-
-							if ( typeof fn === "function") {
-									
-									fn(value)
-
-							}
+					if( stack[0] === undefined){
+						return false
 					}
+
+					var stack2 = [];
+					for( var i = 0,len = stack.length;i<len;i++){
+						stack2[i] = stack[i](value)
+					}
+
+					stack2 = stack2.filter(function(item){
+						return item !== undefined
+					})
+
+					next(stack2)
+				}
 				
 
-				next(value)
+				next(stack)
 			})
 		}
 
@@ -345,26 +351,12 @@
 
 			if (typeof onFulfilled === 'function') {
 
-				this._fulfilledStack.push(function(value){
-
-					var result = onFulfilled(value)
-
-					if (result instanceof Promise) {
-						result.then(function(value){
-							resolve(promise,value,false)
-						})
-					} else if( result !== "undefined") {
-
-						resolve(promise,result)
-					}
-				})
+				this._fulfilledStack.push(makeFulfilledfunc(onFulfilled,promise))
 
 			}
 
 			if (typeof onRejected === 'function') {
-				this._rejectedStack.push(function(promise){
-					onRejected()
-				})
+				this._rejectedStack.push(makeRejectedfunc(onRejected,promise))
 			}
 
 			
@@ -380,7 +372,53 @@
 
 	}
 
+	function makeFulfilledfunc(onFulfilled,promise){
 
+		return function(value){
+			var result = onFulfilled(value)
+
+			return function(){
+				var len;
+				if( result instanceof Promise){
+						result.then(function(value){
+							for(var i = 0,len = promise._fulfilledStack.length;i<len;i++){
+								return promise._fulfilledStack[i](value)
+							}
+						})
+				}else if( result !== undefined && typeof result !== "function"){
+					for(var i = 0,len = promise._fulfilledStack.length;i<len;i++){
+							return promise._fulfilledStack[i](result)
+					}
+				}else if( typeof result === "function"){
+					return result
+				}
+			}
+		}
+	}
+
+	function makeRejectedfunc(onRejected,promise){
+
+		return function(value){
+			var result = onRejected(value)
+
+			return function(){
+				var len;
+				if( result instanceof Promise){
+						result.then(function(value){
+							for(var i = 0,len = promise._rejectedStack.length;i<len;i++){
+								return promise._rejectedStack[i](value)
+							}
+						})
+				}else if( result !== undefined && typeof result !== "function"){
+					for(var i = 0,len = promise._rejectedStack.length;i<len;i++){
+							return promise._rejectedStack[i](result)
+					}
+				}else if( typeof result === "function"){
+					return result
+				}
+			}
+		}
+	}
 
 
 

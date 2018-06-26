@@ -6,3 +6,4 @@
 /test/unit/*.js
 /*.html
 /static/*.js
+/static/*.html
