@@ -112,7 +112,8 @@
 
 		var promise = new Promise(empty)
 	
-		reject(promise,reason)
+		promise._status = Status.REJECTED;
+		promise._value = reason
 
 		return promise
 
@@ -188,10 +189,9 @@
 
 				function next(stack){			
 
-					if( stack[0] === undefined){
+					if( !!!stack[0]  ){
 						return false
 					}
-
 					var stack2 = [];
 					for( var i = 0,len = stack.length;i<len;i++){
 						stack2[i] = stack[i](value)
@@ -335,7 +335,10 @@
 		 * 否则，它将显示为成功(resolved)
 		 * @return {Promise}  返回一个Promise
 		 */
-		catch:function(onRejected){},
+		catch:function(onRejected){
+			var promise = this.then(undefined,onRejected);
+			return promise
+		},
 
 		/**
 		 * then()方法返回一个Promise.它最多需要有两个参数:Promise的成功和失败的情况的回调函数
@@ -375,22 +378,51 @@
 	function makeFulfilledfunc(onFulfilled,promise){
 
 		return function(value){
-			var result = onFulfilled(value)
 
-			return function(){
-				var len;
-				if( result instanceof Promise){
-						result.then(function(value){
-							for(var i = 0,len = promise._fulfilledStack.length;i<len;i++){
-								return promise._fulfilledStack[i](value)
+			if( typeof onFulfilled === 'function'){
+				var result;
+				try {
+					result = onFulfilled(value)
+				}
+				catch (e) {
+					// 如果调用回调函数抛出异常，则直接reject当前promise
+					reject(promise, e);
+					return false;
+				}
+				if( result === promise ){
+					var reason = new TypeError('TypeError:The return value could not be same with the promise')
+					reject(promise,reason)
+				}
+				
+
+				return function(){
+					var len;
+					if( result instanceof Promise){
+							result.then(
+							function(value){
+								for(var i = 0,len = promise._fulfilledStack.length;i<len;i++){
+									return promise._fulfilledStack[i](value)
+								}
+							},
+							function(reason){
+								for(var i = 0,len = promise._rejectedStack.length;i<len;i++){
+									return promise._rejectedStack[i](reason)
+								}
 							}
-						})
-				}else if( result !== undefined && typeof result !== "function"){
-					for(var i = 0,len = promise._fulfilledStack.length;i<len;i++){
-							return promise._fulfilledStack[i](result)
+							)
+					}else if( result !== undefined && typeof result !== "function"){
+						for(var i = 0,len = promise._fulfilledStack.length;i<len;i++){
+								return promise._fulfilledStack[i](result)
+						}
+					}else if( typeof result === "function"){
+
+						return result
+
+					}else if( result === undefined){
+						for(var i = 0,len = promise._fulfilledStack.length;i<len;i++){
+								return promise._fulfilledStack[i](result)
+						}
 					}
-				}else if( typeof result === "function"){
-					return result
 				}
 			}
 		}
@@ -399,22 +431,44 @@
 	function makeRejectedfunc(onRejected,promise){
 
 		return function(value){
-			var result = onRejected(value)
 
-			return function(){
-				var len;
-				if( result instanceof Promise){
-						result.then(function(value){
-							for(var i = 0,len = promise._rejectedStack.length;i<len;i++){
-								return promise._rejectedStack[i](value)
-							}
-						})
-				}else if( result !== undefined && typeof result !== "function"){
-					for(var i = 0,len = promise._rejectedStack.length;i<len;i++){
-							return promise._rejectedStack[i](result)
+			if( typeof onRejected === 'function'){
+				var result;
+				try {
+					result = onRejected(value)
+				}
+				catch (e) {
+					// 如果调用回调函数抛出异常，则直接reject当前promise
+					reject(promise, e);
+					return false;
+				}
+				if( result === promise ){
+					var reason = new TypeError('TypeError:The return value could not be same with the promise')
+					reject(promise,reason)
+				}
+				
+
+				return function(){
+					var len;
+					if( result instanceof Promise){
+							result.then(
+							function(value){
+								for(var i = 0,len = promise._fulfilledStack.length;i<len;i++){
+									return promise._fulfilledStack[i](value)
+								}
+							},
+							function(reason){
+								for(var i = 0,len = promise._rejectedStack.length;i<len;i++){
+									return promise._rejectedStack[i](reason)
+								}
+							})
+					}else if( result !== undefined && typeof result !== "function"){
+						for(var i = 0,len = promise._fulfilledStack.length;i<len;i++){
+								return promise._fulfilledStack[i](result)
+						}
+					}else if( typeof result === "function"){
+						return result
 					}
-				}else if( typeof result === "function"){
-					return result
 				}
 			}
 		}
