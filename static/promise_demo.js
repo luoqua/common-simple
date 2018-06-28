@@ -159,16 +159,24 @@
 	 */
 	Promise.resolve = function(value){
 
+
 		if(value instanceof Promise) {
 			return value
+
+		}else if(typeof value === 'object' && typeof value.then === 'function'){
+
+			var then = value.then;
+			return new Promise(then)
+
+		}else{
+
+			var promise = new Promise(empty)
+			promise._status = Status.FULLFILLED
+			promise._value = value
+
+			return promise
+
 		}
-
-		var promise = new Promise(empty)
-	
-		promise._status = Status.FULLFILLED
-		promise._value = value
-
-		return promise
 	}
 	
 
