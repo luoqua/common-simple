@@ -44,33 +44,43 @@ var options = {
 	},
 	hostApi: 'asdasd'
 }
-var p1 = new Promise(function(resolve, reject) {
-  resolve('Success');
-});
 
-p1.then(function(value) {
-  console.log(value); // "成功!"
-  throw 'oh, no!';
-}).then(function(){
-  console.log('after a catch the chain is restored');
-}, function () {
-  console.log('Not fired due to the catch');
-});
 
-// 以下行为与上述相同
-p1.then(function(value) {
-  console.log(value); // "成功!"
-  return new Promise(function(resolve, reject) {
+
+var aa = Promise.resolve("foo")
+  // 1. 接收 "foo" 并与 "bar" 拼接，并将其结果做为下一个resolve返回。
+  .then(function(string) {
+    return new Promise(function(resolve, reject) {
       setTimeout(function() {
-        value += 'bar';
-        resolve(value);
+        string += 'bar';
+        resolve(string);
       }, 1);
     });
-}).then(function(){
-  console.log('after a catch the chain is restored');
-}, function () {
-  console.log('Not fired due to the catch');
-});
+  })
+  // 2. 接收 "foobar", 放入一个异步函数中处理该字符串
+  // 并将其打印到控制台中, 但是不将处理后的字符串返回到下一个。
+  .then(function(string) {
+    setTimeout(function() {
+      string += 'baz';
+      console.log(string);
+    }, 1)
+    return string;
+  })
+  // 3. 打印本节中代码将如何运行的帮助消息，
+  // 字符串实际上是由上一个回调函数之前的那块异步代码处理的。
+  .then(function(string) {
+    console.log("Last Then:  oops... didn't bother to instantiate and return " +
+                "a promise in the prior then so the sequence may be a bit " +
+                "surprising");
+
+    // 注意 `string` 这时不会存在 'baz'。
+    // 因为这是发生在我们通过setTimeout模拟的异步函数中。
+    console.log(string);
+}).finally(function(){
+	throw 'no NO'
+})
+
+
     </script>
   </body>
 </html>

@@ -90,14 +90,24 @@
 
 		var promise = this
 
-		resolver(
-			function(value){
-				resolve(promise,value)
-			},
-			function(reason){
+		//捕获resolver中的错误
+		try{
+			resolver(
+				function(value){
+					resolve(promise,value)
+				},
+				function(reason){
+					reject(promise,reason)
+				}
+			)
+		}
+		catch(reason){
+			//如果是非解决状态，捕获抛出的错误
+			if(promise._status === Status.PENDING){
 				reject(promise,reason)
 			}
-		)
+		}
+
 	}
 
                     
@@ -198,7 +208,7 @@
 					}
 
 					stack2 = stack2.filter(function(item){
-						return item !== undefined
+						return item !== undefined && item !== false
 					})
 
 					next(stack2)
@@ -336,8 +346,13 @@
 		 * @return {Promise}  返回一个Promise
 		 */
 		catch:function(onRejected){
-			var promise = this.then(undefined,onRejected);
-			return promise
+			// catch只执行rejected状态下以及pending状态的回调
+			if( this._status !== Status.FULLFILLED ){
+				var promise = this.then(undefined,onRejected);
+				return promise
+			}else {
+				return this;
+			}
 		},
 
 		/**
@@ -371,8 +386,81 @@
 		// 添加一个事件处理回调于当前promise对象，并且在原promise对象解析完毕后，
 		// 返回一个新的promise对象。回调会在当前promise运行完毕后被调用，
 		// 无论当前promise的状态是完成(fulfilled)还是失败(rejected)
-		finally:function(onFinally){}
+		// 如果最后一个事件处理回调抛出一个错误，则返回一个拒绝状态的promise，
+		// 并且拒绝原因为抛出的错误原因
+		finally:function(onFinally){
+			var promise = new Promise(empty)
 
+			if (typeof onFinally === 'function') {
+
+				this._fulfilledStack.push(makeFinallyfunc(onFinally,promise))
+
+			}
+
+			promise._status = this._status
+
+			promise._value = this._value
+			
+			setTimeoutPromise(this)
+			
+			return promise
+		}
+
+	}
+
+
+	function makeFinallyfunc(onFinally,promise){
+
+		return function(value){
+
+			if( typeof onFinally === 'function'){
+				var result;
+				try {
+					result = onFinally(value)
+				}
+				catch (e) {
+					// 如果调用回调函数抛出异常，则直接reject当前promise
+					reject(promise, e);
+					return false;
+				}
+				if( result === promise ){
+					var reason = new TypeError('TypeError:The return value could not be same with the promise')
+					reject(promise,reason)
+				}
+
+
+				//返回闭包函数，用于处理下一个then中的回调函数
+				return function(){
+					var len;
+					if( result instanceof Promise){
+							result.then(
+							function(value){
+								for(var i = 0,len = promise._fulfilledStack.length;i<len;i++){
+									return promise._fulfilledStack[i](value)
+								}
+							},
+							function(reason){
+								for(var i = 0,len = promise._rejectedStack.length;i<len;i++){
+									return promise._rejectedStack[i](reason)
+								}
+							}
+							)
+					}else if( result !== undefined && typeof result !== "function"){
+						for(var i = 0,len = promise._fulfilledStack.length;i<len;i++){
+								return promise._fulfilledStack[i](result)
+						}
+					}else if( typeof result === "function"){
+
+						return result
+
+					}else if( result === undefined){
+						for(var i = 0,len = promise._fulfilledStack.length;i<len;i++){
+								return promise._fulfilledStack[i](result)
+						}
+					}
+				}
+			}
+		}
 	}
 
 	function makeFulfilledfunc(onFulfilled,promise){
@@ -393,8 +481,14 @@
 					var reason = new TypeError('TypeError:The return value could not be same with the promise')
 					reject(promise,reason)
 				}
-				
 
+				// 改变promise的状态和值
+				promise._status = Status.FULLFILLED;
+				if( typeof result !== 'function' ){
+					promise._value = result
+				}
+
+				//返回闭包函数，用于处理下一个then中的回调函数
 				return function(){
 					var len;
 					if( result instanceof Promise){
@@ -447,7 +541,13 @@
 					reject(promise,reason)
 				}
 				
+				// 改变promise的状态和值
+				promise._status = Status.FULLFILLED;
+				if( typeof result !== 'function' ){
+					promise._value = result
+				}
 
+				//返回闭包函数，用于处理下一个then中的回调函数
 				return function(){
 					var len;
 					if( result instanceof Promise){
@@ -468,6 +568,10 @@
 						}
 					}else if( typeof result === "function"){
 						return result
+					}else if( result === undefined){
+						for(var i = 0,len = promise._fulfilledStack.length;i<len;i++){
+								return promise._fulfilledStack[i](result)
+						}
 					}
 				}
 			}
