@@ -296,7 +296,25 @@
 	 * 如果传入的 promise中又一个失败(rejected)，Promise.all 异步地将失败的那个结果传给
 	 * 失败状态的函数，而不管其他promise是否完成。
 	 */
-	Promise.all = function(iterable){}
+	Promise.all = function(iterable){
+
+		var promise_result = [];
+		var promise = new Promise(empty)
+		promise._status = Status.FULLFILLED
+		promise._value = value
+
+		iterable.forEach(function(item){
+			if( item instanceof Promise){
+				item.then(function(value){
+					promise_result.push(value)
+				})
+			}else{
+				promise_result.push(item)
+			}
+		})
+		console.log(promise_result)
+		return this
+	}
 
 	
 	/** 
