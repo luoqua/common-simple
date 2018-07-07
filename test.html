@@ -45,47 +45,36 @@ var options = {
 	hostApi: 'asdasd'
 }
 
-
-// Thenable在callback之前抛出异常
-// Promise rejects
-var thenable = { then: function(resolve) {
-  throw "Throwing";
-  resolve("Resolving");
-}};
-
-var p2 = Promise.resolve(thenable);
-p2.then(function(v) {
-  // 不会被调用
-}, function(e) {
-  console.log(e); // TypeError: Throwing
+var p1 = new Promise((resolve, reject) => { 
+  setTimeout(resolve, 1000, 'one'); 
+}); 
+var p2 = new Promise((resolve, reject) => { 
+  setTimeout(resolve, 2000, 'two'); 
+});
+var p3 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 3000, 'three');
+});
+var p4 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 4000, 'four');
+});
+var p5 = new Promise((resolve, reject) => {
+  reject('reject');
 });
 
-// Thenable在callback之后抛出异常
-// Promise resolves
-var thenable = { then: function(resolve) {
-  resolve("Resolving");
-  throw new TypeError("Throwing");
-}};
 
-var p3 = Promise.resolve(thenable);
-p3.then(function(v) {
-  console.log(v); // 输出"Resolving"
-}, function(e) {
-  // 不会被调用
-});
 
-var promise1 = Promise.resolve(3);
-var promise2 = 42;
-var promise3 = new Promise(function(resolve, reject) {
-  setTimeout(resolve, 100, 'foo');
-});
+//From console:
+//"reject"
 
-Promise.all([promise1, promise2, promise3]).then(function(values) {
+//You can also use .catch
+var aa = Promise.all([p1, p2, p3, p4, p5]).then(values => { 
   console.log(values);
-});
-// expected output: Array [3, 42, "foo"]
+})
 
+console.log(aa)
 
+//From console: 
+//"reject"
 
     </script>
   </body>

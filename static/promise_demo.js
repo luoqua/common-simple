@@ -200,13 +200,13 @@
 
 		var value = promise._value;
 		
-		
 		if (stack.length === 1) {
 
 			setTimeout(function(){
 
 				function next(stack){			
 
+					
 					if( !!!stack[0]  ){
 						return false
 					}
@@ -298,24 +298,80 @@
 	 */
 	Promise.all = function(iterable){
 
-		var promise_result = [];
-		var promise = new Promise(empty)
-		promise._status = Status.FULLFILLED
-		promise._value = value
+		if (!iterable || !iterable.hasOwnProperty('length')) {
+            throw new TypeError('TypeError: Parameter `iterable` must be a iterable object');
+        }
 
-		iterable.forEach(function(item){
-			if( item instanceof Promise){
-				item.then(function(value){
-					promise_result.push(value)
-				})
-			}else{
-				promise_result.push(item)
-			}
+		var promise_result = [];
+
+
+		var promise = new Promise(function(resolve,reject) {
+			
+			handlePromiseAll(iterable,promise_result,resolve,reject)
+
 		})
-		console.log(promise_result)
-		return this
+		
+
+		return promise
 	}
 
+	/**
+	 * 处理Promise.all的resolve
+	 * @param  {[type]} i              [description]
+	 * @param  {[type]} len            [description]
+	 * @param  {[type]} resolve        [description]
+	 * @param  {[type]} promise_result [description]
+	 * @return {[type]}                [description]
+	 */
+	function handlePromiseAll(iterable,promise_result,resolve,reject) {
+
+		var len = iterable.length;
+
+		for( var i = 0; i < len;i++){
+
+			var fnc = iterable[i];
+
+			if( fnc instanceof Promise && fnc._status === Status.PENDING){
+				(function(i){
+					fnc.then(
+						function(value) {
+							promise_result.push(value)
+							if( i===len - 1){
+								allResolve(i,len,resolve,promise_result)
+							}
+						},
+						function(reson){
+							reject(reson)
+							return false;
+						}
+					)
+				})(i)
+			}else if(fnc instanceof Promise && fnc._status === Status.FULLFILLED){
+				promise_result.push(fnc._value)
+				allResolve(i,len,resolve,promise_result)
+
+			}else if(fnc instanceof Promise && fnc._status === Status.REJECTED){
+				setTimeout(function(){
+					reject(fnc._value)
+				})
+				return false;
+
+			}else{
+				promise_result.push(fnc)
+				allResolve(i,len,resolve,promise_result)
+			}
+		}
+	}
+
+
+	function allResolve(i,len,resolve,promise_result){
+		if( i===len - 1){
+			setTimeout(function(){
+				resolve(promise_result);
+			})
+			return false;
+		}
+	}
 	
 	/** 
 	  * 该方法回一个promise，一旦迭代器中的某个promise解决或拒绝，
@@ -349,7 +405,11 @@
 	  * 如果迭达包含一个或多个非承诺值或已解决或已拒绝的承诺，则Promise.race
 	  * 将解析为迭达中找到的第一个值
 	  */
-	Promise.race = function(iterable){}
+	Promise.race = function(iterable){
+
+
+
+	}
 
 
 
@@ -372,10 +432,10 @@
 		 * @return {Promise}  返回一个Promise
 		 */
 		catch:function(onRejected){
+
 			// catch只执行rejected状态下以及pending状态的回调
 			if( this._status !== Status.FULLFILLED ){
-				var promise = this.then(undefined,onRejected);
-				return promise
+				return this.then(undefined,onRejected);
 			}else {
 				return this;
 			}
@@ -400,12 +460,32 @@
 			}
 
 			if (typeof onRejected === 'function') {
+
 				this._rejectedStack.push(makeRejectedfunc(onRejected,promise))
 			}
 
+			setTimeout(function(){
+				if( this._status === Status.REJECTED && onFulfilled !== undefined && onRejected === undefined){
+					promise._status = Status.REJECTED;
+					promise._value = this._value;
+				}
+			})
 			
 			setTimeoutPromise(this)
 			
+			//处理特殊情况
+			/*var p5 = new Promise((resolve, reject) => {
+			*  reject('reject');
+			*});
+
+			*p5.then(function(value) {
+			*  console.log(value)
+			*}).catch(function(reason){
+			*  console.log(reason)
+			*})
+			*/
+
+
 			return promise
 		},
 
