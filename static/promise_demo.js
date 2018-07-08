@@ -198,14 +198,17 @@
 
 		var stack = promise._status === Status.FULLFILLED ? promise._fulfilledStack : promise._rejectedStack;
 
+		if( promise._status === Status.REJECTED && stack.length === 0){
+						
+			stack = promise._fulfilledStack;
+		}
 		var value = promise._value;
-		
+
 		if (stack.length === 1) {
 
 			setTimeout(function(){
 
-				function next(stack){			
-
+				function next(stack){		
 					
 					if( !!!stack[0]  ){
 						return false
@@ -257,6 +260,7 @@
 
 		promise._status = Status.REJECTED
 		promise._value = reason
+
 		//使用setTimeout去模拟异步
 		setTimeoutPromise(promise)
 	}
@@ -453,23 +457,25 @@
 			
 			var promise = new Promise(empty)
 
+			var that = this;
 			if (typeof onFulfilled === 'function') {
 
-				this._fulfilledStack.push(makeFulfilledfunc(onFulfilled,promise))
+				this._fulfilledStack.push(makeFulfilledfunc(onFulfilled,promise,that))
 
 			}
 
 			if (typeof onRejected === 'function') {
-
 				this._rejectedStack.push(makeRejectedfunc(onRejected,promise))
 			}
 
+			/*var that = this;
 			setTimeout(function(){
-				if( this._status === Status.REJECTED && onFulfilled !== undefined && onRejected === undefined){
+
+				if( that._status === Status.REJECTED && onFulfilled !== undefined && onRejected === undefined){
 					promise._status = Status.REJECTED;
-					promise._value = this._value;
+					promise._value = that._value;
 				}
-			})
+			})*/
 			
 			setTimeoutPromise(this)
 			
@@ -569,10 +575,13 @@
 		}
 	}
 
-	function makeFulfilledfunc(onFulfilled,promise){
+	function makeFulfilledfunc(onFulfilled,promise,that){
 
 		return function(value){
 
+			if( that._status === Status.REJECTED){
+				return reject(promise,that._value)
+			}
 			if( typeof onFulfilled === 'function'){
 				var result;
 				try {
