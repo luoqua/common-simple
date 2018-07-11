@@ -9,7 +9,7 @@
 	}
 })(window,function() {
 
-
+	
 	var Status = {
 		PENDING:'pending',
 		FULLFILLED:'resolved',
@@ -110,7 +110,7 @@
 
 	}
 
-                    
+					
 	/**
 	 * 该方法返回一个带有拒绝原因reason的参数的Promise对象
 	 * @param   reason 表示Promise是被拒绝的
@@ -183,6 +183,9 @@
 	//用于处理resolve的`then`回调
 	function resolve(promise,value,flag){
 
+		if( promise._status === Status.FULLFILLED){
+			return false;
+		}
 		promise._status = Status.FULLFILLED
 		promise._value = value
 
@@ -191,17 +194,17 @@
 
 
 	function setTimeoutPromise(promise,flag){
-
+		
 		if( promise._status === Status.PENDING){
 			return false;
 		}
-
+		
 		var stack = promise._status === Status.FULLFILLED ? promise._fulfilledStack : promise._rejectedStack;
-
+		
 		if( promise._status === Status.REJECTED && stack.length === 0){
-						
 			stack = promise._fulfilledStack;
 		}
+
 		var value = promise._value;
 
 		if (stack.length === 1) {
@@ -258,6 +261,9 @@
 	//用于处理reject的`then`回调
 	function reject(promise,reason){
 
+		if( promise._status === Status.REJECTED){
+			return false;
+		}
 		promise._status = Status.REJECTED
 		promise._value = reason
 
@@ -303,18 +309,25 @@
 	Promise.all = function(iterable){
 
 		if (!iterable || !iterable.hasOwnProperty('length')) {
-            throw new TypeError('TypeError: Parameter `iterable` must be a iterable object');
-        }
+			throw new TypeError('TypeError: Parameter `iterable` must be a iterable object');
+		}
 
-		var promise_result = [];
+		if(iterable.length === 0){
+			var promise = Promise.resolve(iterable);
+			return promise
+
+		}else{
+
+			var promise_result = [];
 
 
-		var promise = new Promise(function(resolve,reject) {
-			
-			handlePromiseAll(iterable,promise_result,resolve,reject)
+			var promise = new Promise(function(resolve,reject) {
+				
+				handlePromiseAll(iterable,promise_result,resolve,reject)
 
-		})
+			})
 		
+		}	
 
 		return promise
 	}
@@ -385,7 +398,7 @@
 		* var promise1 = new Promise(function(resolve,reject)){
 		* 		setTimeout(resolve,500,'one')
 		* }
-	 	* 
+		* 
 		* var promise2 = new Promise(function(resolve,reject)) {
 		* 		setTimeout(resolve,100,'two')
 		* }
@@ -411,12 +424,70 @@
 	  */
 	Promise.race = function(iterable){
 
+		if (!iterable || !iterable.hasOwnProperty('length')) {
+			throw new TypeError('TypeError: Parameter `iterable` must be a iterable object');
+		}
 
+
+
+		var promise_result = [];
+
+
+		var promise = new Promise(function(resolve,reject) {
+			
+			handlePromiseRace(iterable,promise_result,resolve,reject)
+
+		})
+		
+		return promise
 
 	}
 
 
+	function handlePromiseRace(iterable,promise_result,resolve,reject){
+		var len = iterable.length;
 
+		for( var i = 0; i < len;i++){
+
+			var fnc = iterable[i];
+
+			if( fnc instanceof Promise && fnc._status === Status.PENDING){
+				(function(i){
+					fnc.then(
+						function(value) {
+							
+							raceResolve(resolve,value)
+						},
+						function(reson){
+							reject(reson)
+							return false;
+						}
+					)
+				})(i)
+			}else if(fnc instanceof Promise && fnc._status === Status.FULLFILLED){
+				
+				raceResolve(resolve,fnc._value)
+				return false;
+
+			}else if(fnc instanceof Promise && fnc._status === Status.REJECTED){
+				setTimeout(function(){
+					reject(fnc._value)
+				})
+				return false;
+
+			}else{
+				raceResolve(resolve,fnc._value)
+				return false;
+			}
+		}
+	}
+
+	function raceResolve(resolve,value){
+		setTimeout(function(){
+			resolve(value);
+		})
+		return false;
+	}
 
 
 
@@ -465,7 +536,7 @@
 			}
 
 			if (typeof onRejected === 'function') {
-				this._rejectedStack.push(makeRejectedfunc(onRejected,promise))
+				this._rejectedStack.push(makeRejectedfunc(onRejected,promise,that))
 			}
 
 			/*var that = this;
@@ -580,6 +651,7 @@
 		return function(value){
 
 			if( that._status === Status.REJECTED){
+
 				return reject(promise,that._value)
 			}
 			if( typeof onFulfilled === 'function'){
@@ -607,7 +679,7 @@
 				return function(){
 					var len;
 					if( result instanceof Promise){
-							result.then(
+						result.then(
 							function(value){
 								for(var i = 0,len = promise._fulfilledStack.length;i<len;i++){
 									return promise._fulfilledStack[i](value)
@@ -618,7 +690,7 @@
 									return promise._rejectedStack[i](reason)
 								}
 							}
-							)
+						)
 					}else if( result !== undefined && typeof result !== "function"){
 						for(var i = 0,len = promise._fulfilledStack.length;i<len;i++){
 								return promise._fulfilledStack[i](result)
@@ -637,10 +709,11 @@
 		}
 	}
 
-	function makeRejectedfunc(onRejected,promise){
+	function makeRejectedfunc(onRejected,promise,that){
 
 		return function(value){
-
+			
+			
 			if( typeof onRejected === 'function'){
 				var result;
 				try {
@@ -665,6 +738,7 @@
 				//返回闭包函数，用于处理下一个then中的回调函数
 				return function(){
 					var len;
+
 					if( result instanceof Promise){
 							result.then(
 							function(value){

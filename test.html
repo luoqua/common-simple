@@ -16,7 +16,7 @@
     </div>
     <!-- built files will be auto injected -->
     <script type="text/javascript" src="static/lInput.js"></script>
-    <script type="text/javascript" src="static/promise_demo.js"></script>
+    <script type="text/javascript" src="static/promise_demo.js" ></script>
     <script type="text/javascript">
 var options = {
 	parent: 'form',
@@ -45,24 +45,34 @@ var options = {
 	hostApi: 'asdasd'
 }
 
-
-
 var p5 = new Promise((resolve, reject) => {
-  setTimeout(function(){
+  setTimeout(function() {
     reject('reject');
   })
-
 });
 
-var aa = p5.then(function(reason) {
+p5.then(values => { 
+  console.log(values);
+}, reason => {
   console.log(reason)
-}).catch(function(reason){
-  console.log(reason)
-})
+});
 
-Promise.reject()
-  .then( () => 99, () => 42 ) // onRejected returns 42 which is wrapped in a resolving Promise
-  .then( solution => console.log( 'Resolved with ' + solution ) ); // Resolved with 42
+
+
+//From console:
+//"reject"
+
+//You can also use .catch
+p5.then(values => { 
+  console.log(values);
+}).catch(reason => { 
+  console.log(reason)
+});
+
+//From console: 
+//"reject"
+
+
     </script>
   </body>
 </html>
