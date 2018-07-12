@@ -198,40 +198,44 @@
 		if( promise._status === Status.PENDING){
 			return false;
 		}
-		
-		var stack = promise._status === Status.FULLFILLED ? promise._fulfilledStack : promise._rejectedStack;
-		
-		if( promise._status === Status.REJECTED && stack.length === 0){
-			stack = promise._fulfilledStack;
-		}
 
-		var value = promise._value;
+		setTimeout(function(){
+			var stack;
 
-		if (stack.length === 1) {
+			stack = promise._status === Status.FULLFILLED ? promise._fulfilledStack : promise._rejectedStack;
+			
+			if( promise._status === Status.REJECTED && stack.length === 0){
+				stack = promise._fulfilledStack;
+			}
 
-			setTimeout(function(){
-
-				function next(stack){		
-					
-					if( !!!stack[0]  ){
-						return false
-					}
-					var stack2 = [];
-					for( var i = 0,len = stack.length;i<len;i++){
-						stack2[i] = stack[i](value)
-					}
-
-					stack2 = stack2.filter(function(item){
-						return item !== undefined && item !== false
-					})
-
-					next(stack2)
-				}
+			if( promise._status === Status.REJECTED && promise._fulfilledStack.length >= 2){
+				let [,...other_stack] = promise._fulfilledStack;
+				Array.prototype.push.apply(stack,other_stack)
+			}
+			var value = promise._value;
+			function next(stack){		
 				
+				if( !!!stack[0]  ){
+					return false
+				}
+				var stack2 = [];
+				for( var i = 0,len = stack.length;i<len;i++){
+					stack2[i] = stack[i](value)
+				}
 
-				next(stack)
-			})
-		}
+				stack2 = stack2.filter(function(item){
+					return item !== undefined && item !== false
+				})
+
+				next(stack2)
+			}
+			
+
+			next(stack)
+
+			promise._fulfilledStack = [];
+			promise._rejectedStack = [];
+		})
 
 /*		setTimeout(function(){
 			var len = stack.length;
@@ -446,38 +450,40 @@
 
 	function handlePromiseRace(iterable,promise_result,resolve,reject){
 		var len = iterable.length;
-
+		
+		var endFlag = false;                 // 使用endFlag 跳出循环
 		for( var i = 0; i < len;i++){
 
 			var fnc = iterable[i];
 
+			if( endFlag ){
+				break;
+			}
 			if( fnc instanceof Promise && fnc._status === Status.PENDING){
 				(function(i){
 					fnc.then(
 						function(value) {
-							
 							raceResolve(resolve,value)
 						},
-						function(reson){
-							reject(reson)
-							return false;
+						function(reason){
+							setTimeout(function(){
+								reject(fnc._value)
+							})
+							endFlag = true;
 						}
 					)
 				})(i)
 			}else if(fnc instanceof Promise && fnc._status === Status.FULLFILLED){
 				
 				raceResolve(resolve,fnc._value)
-				return false;
 
 			}else if(fnc instanceof Promise && fnc._status === Status.REJECTED){
 				setTimeout(function(){
 					reject(fnc._value)
 				})
-				return false;
-
+				endFlag = true;
 			}else{
 				raceResolve(resolve,fnc._value)
-				return false;
 			}
 		}
 	}
@@ -486,7 +492,7 @@
 		setTimeout(function(){
 			resolve(value);
 		})
-		return false;
+		endFlag = true;
 	}
 
 

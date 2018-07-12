@@ -14,9 +14,11 @@
     	<input type="number" name=""  class="user_phone">
     	<button id="btn"></button>
     </div>
+
+    <button id="btn" onclick="testPromise()">Make a promise!</button>
+    <div id="log"></div>
     <!-- built files will be auto injected -->
-    <script type="text/javascript" src="static/lInput.js"></script>
-    <script type="text/javascript" src="static/promise_demo.js" ></script>
+    <script type="text/javascript" src="static/lInput.js"></script>s
     <script type="text/javascript">
 var options = {
 	parent: 'form',
@@ -44,35 +46,35 @@ var options = {
 	},
 	hostApi: 'asdasd'
 }
+// 抛出一个错误，大多数时候将调用catch方法
+var p1 = new Promise(function(resolve, reject) {
+  throw 'Uh-oh!';
+});
 
-var p5 = new Promise((resolve, reject) => {
+p1.catch(function(e) {
+  console.log(e); // "Uh-oh!"
+});
+
+// 在异步函数中抛出的错误不会被catch捕获到
+var p2 = new Promise(function(resolve, reject) {
   setTimeout(function() {
-    reject('reject');
-  })
+    throw 'Uncaught Exception!';
+  }, 1000);
 });
 
-p5.then(values => { 
-  console.log(values);
-}, reason => {
-  console.log(reason)
+p2.catch(function(e) {
+  console.log(e); // 不会执行
 });
 
-
-
-//From console:
-//"reject"
-
-//You can also use .catch
-p5.then(values => { 
-  console.log(values);
-}).catch(reason => { 
-  console.log(reason)
+// 在resolve()后面抛出的错误会被忽略
+var p3 = new Promise(function(resolve, reject) {
+  resolve();
+  throw 'Silenced Exception!';
 });
 
-//From console: 
-//"reject"
-
-
+p3.catch(function(e) {
+   console.log(e); // 不会执行
+});
     </script>
   </body>
 </html>
