@@ -18,63 +18,49 @@
     <button id="btn" onclick="testPromise()">Make a promise!</button>
     <div id="log"></div>
     <!-- built files will be auto injected -->
-    <script type="text/javascript" src="static/lInput.js"></script>s
+    <script type="text/javascript" src="static/lInput.js"></script>
+    <script type="text/javascript" src="static/promise_demo.js"></script>
     <script type="text/javascript">
-var options = {
-	parent: 'form',
-	selectType: 'id', // 支持class、name 的选择
-	btn: 'btn',
-	needfields: [
-		{
-			fieldName: 'phone',
-			isRequired: true,
-			Regxp: '',
-			err_null_msg: '请填写您的号码',
-			err_rxp_msg: '请填写正确的手机号码'
-		},
-		{
-			fieldName: 'district',
-			isRequired: true,
-			Regxp: '',
-			err_null_msg: '请填写您的装修地址',
-			err_rxp_msg: '请填写正确的装修地址'
-		}
-	],
-	formfields: {
-		phone: '.user_phone',
-		district: '.user_district'
-	},
-	hostApi: 'asdasd'
-}
-// 抛出一个错误，大多数时候将调用catch方法
-var p1 = new Promise(function(resolve, reject) {
-  throw 'Uh-oh!';
+// Resolve一个thenable对象
+var p1 = Promise.resolve({ 
+  then: function(onFulfill, onReject) { onFulfill("fulfilled!"); }
+});
+console.log(p1 instanceof Promise) // true, 这是一个Promise对象
+
+p1.then(function(v) {
+    console.log(v); // 输出"fulfilled!"
+  }, function(e) {
+    // 不会被调用
 });
 
-p1.catch(function(e) {
-  console.log(e); // "Uh-oh!"
+// Thenable在callback之前抛出异常
+// Promise rejects
+var thenable = { then: function(resolve) {
+  throw new TypeError("Throwing");
+  resolve("Resolving");
+}};
+
+var p2 = Promise.resolve(thenable);
+p2.then(function(v) {
+  // 不会被调用
+}, function(e) {
+  console.log(e); // TypeError: Throwing
 });
 
-// 在异步函数中抛出的错误不会被catch捕获到
-var p2 = new Promise(function(resolve, reject) {
-  setTimeout(function() {
-    throw 'Uncaught Exception!';
-  }, 1000);
+// Thenable在callback之后抛出异常
+// Promise resolves
+var thenable = { then: function(resolve) {
+  resolve("Resolving");
+  throw new TypeError("Throwing");
+}};
+
+var p3 = Promise.resolve(thenable);
+p3.then(function(v) {
+  console.log(v); // 输出"Resolving"
+}, function(e) {
+  // 不会被调用
 });
 
-p2.catch(function(e) {
-  console.log(e); // 不会执行
-});
-
-// 在resolve()后面抛出的错误会被忽略
-var p3 = new Promise(function(resolve, reject) {
-  resolve();
-  throw 'Silenced Exception!';
-});
-
-p3.catch(function(e) {
-   console.log(e); // 不会执行
-});
     </script>
   </body>
 </html>
