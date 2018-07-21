@@ -11,7 +11,7 @@ module.exports = {
   dev: {
 
     // Paths
-    assetsSubDirectory: 'static',
+    assetsSubDirectory: 'packages/utils',
     assetsPublicPath: '/',
     proxyTable: {},
 

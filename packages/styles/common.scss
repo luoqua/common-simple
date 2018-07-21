@@ -1,0 +1,118 @@
+$designWidth : 750;
+
+//px转rem
+@function px2rem( $px ){
+    @return $px*750/$designWidth/100 + rem; 
+}
+
+@mixin borderRdius($radius) {
+	-webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -ms-border-radius: $radius;
+    -o-border-radius: $radius;
+    border-radius: $radius;
+}
+
+//定位全屏
+@mixin allcover {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+}
+
+//定位上下左右居中
+@mixin center {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform:translate(-50%,-50%)
+}
+
+//定位上下居中
+@mixin ct {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+//定位上下居中
+@mixin cl {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+//宽高
+@mixin wh($width,$height) {
+	width: $width;
+	height: $height;
+}
+
+//字体大小、行高、字体
+@mixin font($size,$line-height,$family: 'Microsoft Yahei') {
+	font: #{$size}/#{$line-height} $family;
+}
+
+//字体大小，颜色
+@mixin sc($size, $color:#333){
+	font-size:px2rem($size);
+	color: $color;
+}
+
+
+//flex布局 和子元素对齐方式
+@mixin fj($type:space-between){
+	display: flex;
+	justify-content:$type;
+	flex-flow:row;
+}
+
+//边框
+@mixin bs($up, $down, $left, $right, $border-size) {
+	
+	@if $up == true {
+		border-top: $border-size;
+	}
+
+	@if $down == true {
+		border-bottom: $border-size;
+	}
+
+	@if $left == true {
+		border-left: $border-size;
+	}
+
+	@if $right == true {
+		border-right: $border-size;
+	}
+}
+
+//背景图标
+@mixin bgicon($url,$width,$height){
+	background-image: url($url);
+	background-repeat: no-repeat;
+	background-position: center;
+	width: px2rem($width);
+	height: px2rem($height);
+	display: inline-block;
+}
+
+@mixin ts-style($time, $origin:50% 50%,$type:all){
+	-webkit-transition: $type $time;
+    -moz-transition: $type $time;
+    -o-transition: $type $time;
+    transition: $type $time;
+    -webkit-transform-origin: $origin;
+    -moz-transform-origin: $origin;
+    -ms-transform-origin: $origin;
+    -o-transform-origin: $origin;
+    transform-origin: $origin;
+}
+
+@mixin trans-rotate($rd){
+	-webkit-transform: rotate($rd);
+    -moz-transform: rotate($rd);
+    -ms-transform: rotate($rd);
+    -o-transform: rotate($rd);
+    transform: rotate($rd);
+}

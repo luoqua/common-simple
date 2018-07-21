@@ -59,13 +59,13 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({                         //该插件将为你生成一个 HTML5 文件， 其中包括使用 script 标签的 body 中的所有 webpack 包。 只需添加插件到你的 webpack 配置如下：
       filename: 'index.html',
-      template: 'index.html',
+      template: 'index_phone.html',
       inject: true
     }),
     // copy custom static assets
     new CopyWebpackPlugin([                         //复制静态资源
       {
-        from: path.resolve(__dirname, '../static'),
+        from: path.resolve(__dirname, '../packages/utils'),
         to: config.dev.assetsSubDirectory,
         ignore: ['.*']
       }
