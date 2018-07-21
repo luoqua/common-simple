@@ -1,27 +1,9 @@
 <template>
   <section class="nav-section">
   	<ul>
-  		<li class="nav active" :class="classObject" >
+  		<li class="nav" v-for="(item,index) in nav_info" :class="{ active : nav_index === index}" @click="changeActive(index)" >
   			<span class="current-condition">
-  				户型
-  			</span>
-  			<i class="icon-arrow"></i>
-  		</li>
-  		<li class="nav">
-  			<span class="current-condition">
-  				风格
-  			</span>
-  			<i class="icon-arrow"></i>
-  		</li>
-  		<li class="nav">
-  			<span class="current-condition">
-  				面积
-  			</span>
-  			<i class="icon-arrow"></i>
-  		</li>
-  		<li class="nav">
-  			<span class="current-condition">
-  				更多
+  				{{ item }}
   			</span>
   			<i class="icon-arrow"></i>
   		</li>
@@ -36,21 +18,20 @@ export default {
 		return {
 			msg: 'Welcome to Your Vue.js Appaaaa',
 			isActive: false,
-			nav_info:[
-				{
-
-				},
+			nav_index: 5,
+			nav_info: [
+				'户型',
+				'风格',
+				'面积',
+				'更多'
 			]
 		}
 	},
 	computed: {
-		classObject(){
-			return this.nav_index
-		}
-	}
+	},
 	methods: {
 		changeActive(index) {
-			this.nav_index = index	
+			this.nav_index = this.nav_index === index ? 5 : index
 		}
 	}
 }
@@ -78,6 +59,7 @@ export default {
 			.icon-arrow{
 				@include bgicon('../../icons/icon-arrow.png',15,10)
 				@include center;
+				@include ts-style(0.3s)
 				margin-left: px2rem(45);
 			}
 		}
