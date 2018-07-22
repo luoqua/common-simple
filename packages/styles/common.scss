@@ -13,9 +13,16 @@ $designWidth : 750;
     border-radius: $radius;
 }
 
+//fixed定位
+@mixin pos-fx($top,$left){
+	position: fixed;
+	top: $top;
+	left: $left;
+}
+
 //定位全屏
 @mixin allcover {
-	position: absolute;
+	position: fixed;
 	top: 0px;
 	right: 0px;
 }
@@ -35,7 +42,7 @@ $designWidth : 750;
 	transform: translateY(-50%);
 }
 
-//定位上下居中
+//定位左右居中
 @mixin cl {
 	position: absolute;
 	left: 50%;
@@ -43,7 +50,7 @@ $designWidth : 750;
 }
 
 //宽高
-@mixin wh($width,$height) {
+@mixin wh($width,$height:auto) {
 	width: $width;
 	height: $height;
 }
@@ -61,10 +68,11 @@ $designWidth : 750;
 
 
 //flex布局 和子元素对齐方式
-@mixin fj($type:space-between){
+@mixin fj($type:space-between,$align:flex-start){
 	display: flex;
 	justify-content:$type;
 	flex-flow:row;
+	align-items:$align;
 }
 
 //边框
@@ -97,6 +105,7 @@ $designWidth : 750;
 	display: inline-block;
 }
 
+//动画变化
 @mixin ts-style($time, $origin:50% 50%,$type:all){
 	-webkit-transition: $type $time;
     -moz-transition: $type $time;
@@ -108,11 +117,39 @@ $designWidth : 750;
     -o-transform-origin: $origin;
     transform-origin: $origin;
 }
-
+// 旋转角度
 @mixin trans-rotate($rd){
 	-webkit-transform: rotate($rd);
     -moz-transform: rotate($rd);
     -ms-transform: rotate($rd);
     -o-transform: rotate($rd);
     transform: rotate($rd);
+}
+
+//绝对定位位置上左
+@mixin pos-ab-tl($top: initial,$left: initial){
+	position: absolute;
+	top: $top;
+	left: $left;
+}
+
+//绝对定位位置上右
+@mixin pos-ab-tr($top: initial,$right: initial){
+	position: absolute;
+	top: $top;
+	right: $right;
+}
+
+//绝对定位位置下左
+@mixin pos-ab-bl($bottom: initial,$left: initial){
+	position: absolute;
+	bottom: $bottom;
+	left: $left;
+}
+
+//绝对定位位置下右
+@mixin pos-ab-br($bottom: initial,$right: initial){
+	position: absolute;
+	bottom: $bottom;
+	right: $right;
 }
