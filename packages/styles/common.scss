@@ -71,7 +71,7 @@ $designWidth : 750;
 @mixin fj($type:space-between,$align:flex-start){
 	display: flex;
 	justify-content:$type;
-	flex-flow:row;
+	flex-flow:row wrap;
 	align-items:$align;
 }
 

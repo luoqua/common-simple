@@ -1,32 +1,43 @@
 <template>
   <section class="nav-section">
   	<ul class="nav-ul">
-  		<li class="nav" v-for="(item,index) in nav_info" :class="{ active : nav_index === index}" @click="changeActive(index)" >
+  		<li class="nav" v-for="(item,index) in items" :class="{ active : nav_index === index}" @click="changeActive(index)" >
   			<span class="current-condition">
-  				{{ item }}
+  				{{ item.text }}
   			</span>
   			<i class="icon-arrow"></i>
   		</li>
   	</ul>
   	<section class="menu">
-		<section class="menu1">
-			<ul>
-				<li
-				 v-for="(area_item,index) in area_menu" 
-				 @click="changeNav(index)"
-				 :class="{ active : menu_index === index}"
-				 >{{area_item.name}}</li>
-			</ul>
+  		<section class="menu_select" v-if="menu_select">
+			<section class="menu1" :style="{ width: mainWidth }">
+				<ul>
+					<li
+					 v-for="(item,index) in area_menu" 
+					 @click="changeNav(index)"
+					 :class="{ active : items[nav_index].menu_index === index}"
+					 >{{item.sub_text}}</li>
+				</ul>
+			</section>
+			<section class="menu2" v-if="Ishave">
+				<ul class="sub_menu" >
+					<li class="menu2_li" 
+						v-for="(item,index) in area_submenu"
+						:class="{ active : items[nav_index].sub_nav_index === index}"
+						@click="changeSubNav(index)" >
+						{{item}}
+					</li>
+				</ul>
+			</section>
 		</section>
-		<section class="menu2" >
-			<ul class="sub_menu" >
-				<li class="menu2_li" 
-					v-for="(subarea_item,index) in area_menu[menu_index].submenu"
-					:class="{ active : sub_nav_index === index}"
-					@click="changeSubNav(index)" >
-					{{subarea_item}}
-				</li>
-			</ul>
+		<section class="menu3 menu_list" v-if="menu_list">
+			<ul >
+	            <li :class="{ active : items[nav_index].menu_index === index}"
+	            	v-for="(item,index) in area_menu"
+	            	@click="changeNav(index)" >
+	           	    <a>{{item}}</a>
+	            </li>
+            </ul>
 		</section>
 	</section>
   </section>
@@ -37,60 +48,120 @@ export default {
 	name: 'Index',
 	data() {
 		return {
-			msg: 'Welcome to Your Vue.js Appaaaa',
-			isActive: false,
 			nav_index: 5,
-			menu_index: 0,
-			sub_nav_index: '',
-			nav_info: [
-				'区域',
-				'面积',
-				'类型',
-				'更多'
-			],
-			area_menu: [
+			items: [
 				{
-					name: '按区域',
-					submenu: [
-						'全部',
-						'附近',
-						'滨湖区',
-						'新吴区',
-						'惠山区',
-						'锡山区',
-						'宜兴市',
-						'江阴市',
-						'梁溪区'
+					text: '区域',
+					type: 'menu_select',
+					menu_index: 0,
+					sub_nav_index: '',
+					children: [
+						{
+							sub_text: '按区域',
+							sub_children: [
+								'全部',
+								'附近',
+								'滨湖区',
+								'新吴区',
+								'惠山区',
+								'锡山区',
+								'宜兴市',
+								'江阴市',
+								'梁溪区'
+							]
+						}
 					]
 				},
 				{
-					name: '按地铁',
-					submenu: [
-						'11',
-						'12',
-						'滨22湖区',
-						'新吴区',
-						'惠山区',
-						'锡山区',
-						'宜兴市',
-						'江阴市',
-						'梁溪区'
+					text: '面积',
+					type: 'menu_list',
+					menu_index: 0,
+					sub_nav_index: '',
+					children: [
+						'80-90㎡',
+						'90-100㎡',
+						'100-110㎡',
+						'110-120㎡',
+						'120-130㎡',
+						'130-140㎡',
+						'140-180㎡'
 					]
+				},
+				{
+					text: '类型',
+					type: 'menu_list',
+					menu_index: 0,
+					sub_nav_index: '',
+					children: [
+						'在建工地',
+						'完工工地'
+					]
+				},
+				{
+					text: '更多',
+					children: []
 				}
 			]
 		}
 	},
 	computed: {
+		area_menu() {
+			const selectArea = this.items[this.nav_index] || {}
+
+			return selectArea.children || {}
+		},
+		area_submenu() {
+
+			const selectSubArea = this.area_menu[this.items[this.nav_index].menu_index] || {}
+
+			return selectSubArea.sub_children || {}
+		},
+		mainWidth() {
+			let selectAreaTem = this.area_menu || {}
+
+			if (selectAreaTem.length > 0) {
+				selectAreaTem = selectAreaTem.filter(function(item) {
+					return item.sub_children.length !== 0
+				})
+			}
+
+			if (selectAreaTem.length === 0) {
+				return '100%'
+			}
+
+			return '40%'
+		},
+		Ishave() {
+			if (this.mainWidth === '100%') {
+				return false
+			}
+
+			return true
+		},
+		menu_select() {
+			let selectArea = this.items[this.nav_index] || {}
+			let menuType = selectArea.type
+
+			return menuType === 'menu_select'
+
+		},
+		menu_list() {
+			let selectArea = this.items[this.nav_index] || {}
+			let menuType = selectArea.type
+
+			return menuType === 'menu_list'
+		}
+
 	},
 	methods: {
 		changeActive(index) {
 			this.nav_index = this.nav_index === index ? 5 : index
 		},
 		changeNav(index) {
-			this.menu_index = index
+			this.items[this.nav_index].menu_index = index
 		},
 		changeSubNav(index) {
-			this.sub_nav_index = index
+			this.items[this.nav_index].sub_nav_index = index
 		}
 	}
 }
@@ -145,45 +216,81 @@ export default {
 		@include pos-ab-tr(px2rem(82),0);
 		@include sc(28);
 		@include fj(flex-start);
-	    .menu1{
-			@include wh(40%)
-			li{
-				@include bs(false,true,false,false,px2rem(1) solid #ddd);
-				padding: 0 px2rem(30);
-				height: px2rem(80);
-    			line-height: px2rem(80);
+		.menu_select{
+			position: absolute;
+			width: 100%;
+			@include sc(28);
+			@include fj(flex-start);
+		    .menu1{
+				@include wh(40%)
+				li{
+					@include bs(false,true,false,false,px2rem(1) solid #ddd);
+					padding: 0 px2rem(30);
+					height: px2rem(80);
+	    			line-height: px2rem(80);
+				}
+				.active{
+					color: #62ab00;
+				}
 			}
-			.active{
-				color: #62ab00;
+			.menu2{
+				@include wh(60%);
+				max-height: px2rem(400);
+				overflow-y:scroll;
+				li{
+					@include bs(false,true,true,true,px2rem(1) solid #ddd);
+					padding: 0 px2rem(30);
+					height: px2rem(80);
+	    			line-height: px2rem(80);
+				}
+				.active{
+					color: #62ab00;
+				}
+				&::-webkit-scrollbar {/*滚动条整体样式*/
+				        width: px2rem(5);     /*高宽分别对应横竖滚动条的尺寸*/
+				        height: 1px;
+				    }
+				&::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+				        border-radius: px2rem(10);
+				         -webkit-box-shadow: inset 0 0 px2rem(5) rgba(0,0,0,0.2);
+				        background: #535353;
+				    }
+				&::-webkit-scrollbar-track {/*滚动条里面轨道*/
+				        -webkit-box-shadow: inset 0 0 px2rem(5) rgba(0,0,0,0.2);
+				        border-radius: px2rem(10);
+				        background: #EDEDED;
+				    }
 			}
 		}
-		.menu2{
-			@include wh(60%);
-			max-height: px2rem(400);
-			overflow-y:scroll;
-			li{
-				@include bs(false,true,true,true,px2rem(1) solid #ddd);
-				padding: 0 px2rem(30);
-				height: px2rem(80);
-    			line-height: px2rem(80);
+		.menu3{
+			@extend .menu2;
+			@include wh(100%);
+			ul{
+				@include fj(flex-start);
+				padding-bottom: px2rem(30);
+				li{
+					width: 30%;
+					margin: px2rem(30) 0 0 1.90625%;
+					border:none;
+					padding: 0 px2rem(20);
+					a{
+						border: 1px solid #ececec;
+					    height:  px2rem(68);
+					    line-height: px2rem(68);
+					    color: #333;
+					    text-overflow: ellipsis;
+					    white-space: nowrap;
+					    display: block;
+					    font-size: px2rem(28);
+					    text-align: center;
+					}
+				}
+				.active{
+					a{
+						background-color: #ececec;
+					}
+				}
 			}
-			.active{
-				color: #62ab00;
-			}
-			&::-webkit-scrollbar {/*滚动条整体样式*/
-			        width: px2rem(5);     /*高宽分别对应横竖滚动条的尺寸*/
-			        height: 1px;
-			    }
-			&::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
-			        border-radius: px2rem(10);
-			         -webkit-box-shadow: inset 0 0 px2rem(5) rgba(0,0,0,0.2);
-			        background: #535353;
-			    }
-			&::-webkit-scrollbar-track {/*滚动条里面轨道*/
-			        -webkit-box-shadow: inset 0 0 px2rem(5) rgba(0,0,0,0.2);
-			        border-radius: px2rem(10);
-			        background: #EDEDED;
-			    }
 		}
 	}
 }
