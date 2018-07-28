@@ -69,8 +69,11 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         to: config.dev.assetsSubDirectory,
         ignore: ['.*']
       }
-    ])
-  ]
+    ]),
+  ],
+  externals: {
+    BaiduMap: 'BMap'
+  }
 })
 
 module.exports = new Promise((resolve, reject) => {

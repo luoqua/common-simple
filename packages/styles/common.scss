@@ -99,10 +99,10 @@ $designWidth : 750;
 @mixin bgicon($url,$width,$height){
 	background-image: url($url);
 	background-repeat: no-repeat;
-	background-position: center;
 	width: px2rem($width);
 	height: px2rem($height);
 	display: inline-block;
+	background-size: px2rem($width) px2rem($height);
 }
 
 //动画变化

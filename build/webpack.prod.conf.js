@@ -120,7 +120,10 @@ const webpackConfig = merge(baseWebpackConfig, {
         ignore: ['.*']
       }
     ])
-  ]
+  ],
+  externals: {
+    BaiduMap: 'BMap'
+  }
 })
 
 if (config.build.productionGzip) {
