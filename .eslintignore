@@ -7,3 +7,5 @@
 /*.html
 /static/*.js
 /static/*.html
+/packages/utils/*.js
+/packages/components/tree_select/demo/*.vue

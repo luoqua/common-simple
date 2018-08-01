@@ -43,7 +43,36 @@
 			</section>
 			<section class="box_mask" v-if="box_mask" @click="change_mask()"></section>
 	  </section>
-  	<section id="allmap" :style="{ height: mapHeight + 'px' }"></section>
+	<section class="map">
+  		<section id="allmap" :style="{ height: mapHeight + 'px' }"></section>
+  		<section class="zoom-bar-wrap">
+		  <section class="zoom-in zoom" id="zoom-in-btn"
+		  @click="zoomIn()"></section>
+		  <section class="zoom-out zoom" id="zoom-out-btn"
+		  @click="zoomOut()"></section>
+		</section>
+  	</section>
+	<section v-if="loading">
+		<section class="component-loading">
+		<section class="loadings">
+		<section class="loading-list"></section>
+		<section class="loading-list"></section>
+		<section class="loading-list"></section>
+		<section class="loading-list"></section>
+		<section class="loading-list"></section>
+		<section class="loading-list"></section>
+		<section class="loading-list"></section>
+		<section class="loading-list"></section>
+		</section>
+		<section class="toast_text">正在加载中</section>
+		</section>
+		<section class="toast_mask"></section>
+	</section>
+	<section class="toast" >
+		<transition name="toast-fade">
+			<section class="text" v-if="toast_result">共为您找到这么多工地</section>
+		</transition>
+	</section>
   </section>
 </template>
 
@@ -86,6 +115,7 @@ export default {
 					menu_index: 0,
 					sub_nav_index: '',
 					children: [
+						'不限',
 						'80-90㎡',
 						'90-100㎡',
 						'100-110㎡',
@@ -116,7 +146,10 @@ export default {
 			map: '',	// map实例化对象
 			bs: '',		// 可视区域
 			resultLatLng: '',
-			filter_options: {}		// 过滤条件
+			filter_options: {},		// 过滤条件
+			loading: false,			// 加载动画
+			toast_result: false,
+			timer: ''
 		}
 	},
 	created() {
@@ -215,11 +248,10 @@ export default {
 		initMap() {
 			this.map = new BaiduMap.Map('allmap')						// 创建地图实例
 			let point = new BaiduMap.Point(120.343373,31.540212)		// 创建中心点坐标
-			let marker = new BaiduMap.Marker(point) // 创建标注
 
 			this.map.centerAndZoom(point,16)							// 初始化地图，设置中心点坐标和地图级别
 
-			this.map.addOverlay(marker)
+
 		},
 		change_mask() {
 			this.box_mask = !this.box_mask
@@ -236,16 +268,22 @@ export default {
 		},
 		addMarker(pointData) {
 			var point = new BaiduMap.Point(pointData.lng, pointData.lat)
-			var marker = new BaiduMap.Marker(point)
+			let ComplexCustomOverlay = this.mapaddOverlay()
+			var txt = pointData.address + pointData.area + '㎡'
 
-			this.map.addOverlay(marker)
+
+		    var myCompOverlay = new ComplexCustomOverlay(point, txt)
+
+		    this.map.addOverlay(myCompOverlay)
 		},
 		move_or_zoom() {
 			this.bs = this.map.getBounds()
+
 		},
 		get_site_data_lat(bssw,bsne) {
 			let that = this
 
+			this.loading = true
 			if (that.resultLatLng !== '') {
 				that.filterData(that.resultLatLng,bssw,bsne)
 			} else {
@@ -257,7 +295,7 @@ export default {
 		            }
 		        }
 
-				Fetch('http://192.168.1.144:3000/get_site_data_lat', opitions)
+				Fetch('http://192.168.1.144:3000/get_site_now_lat', opitions)
 		      	.then((data) => {
 			        if (data !== null) {
 
@@ -284,23 +322,117 @@ export default {
 			resultLatLng = resultLatLng.filter(function(item) {
 				return item.lng >= bssw.lng && item.lng <= bsne.lng
 			})
-
+			// 进行面积的过滤
 			let filterArea = that.filter_options['area'] || {}
 
-			
-			if (filterArea.length >= 2) {
-				
-				resultLatLng = resultLatLng.filter(function(item) {
-					return item.area >= filterArea['area'][0] && item.area <= filterArea['area'][1]
-				})
+			filterArea.length >= 2 && 	(resultLatLng = resultLatLng.filter(function(item) {
+				return item.area >= filterArea[0] && item.area <= filterArea[1]
+			}))
 
-			}
-
-			console.log(resultLatLng)
+			this.map.clearOverlays()		// 清除覆盖物
+			that.loading = false
 			resultLatLng.forEach(function(item) {
 				that.addMarker(item)
 			})
+			clearTimeout(this.timer)
+			/*
+			this.timer = setTimeout(function() {
 
+				that.loading = false
+				that.toast_result = true
+				setTimeout(function() {
+
+					that.toast_result = false
+				},500)
+			},1000) */
+		},
+		regxArea(key) {
+			let reg = /㎡$/
+
+			this.filter_options.area = this.search_options[key].replace(reg,'').split('-')
+			let bssw = this.bs.getSouthWest() // 可视区域左下角
+			let bsne = this.bs.getNorthEast() // 可视区域右上角
+
+			this.get_site_data_lat(bssw,bsne)
+		},
+		mapaddOverlay() {
+			let that = this
+
+			function ComplexCustomOverlay(point, text, mouseoverText) {
+		      this._point = point
+		      this._text = text
+		      this._overText = mouseoverText
+		    }
+		    ComplexCustomOverlay.prototype = new BaiduMap.Overlay()
+		    ComplexCustomOverlay.prototype.initialize = function(map) {
+		      this._map = map
+		      this._div = document.createElement('div')
+		      this._span = document.createElement('span')
+		      this._arrow = document.createElement('div')
+		      let arrow = this._arrow
+		      let div = this._div
+		      let span = this._span
+
+		      div.style.position = 'absolute'
+		      div.style.zIndex = BaiduMap.Overlay.getZIndex(this._point.lat)
+		      div.style.backgroundColor = '#EE5D5B'
+		      div.style.border = '1px solid #BC3B3A'
+		      div.style.color = 'white'
+
+		      div.style.padding = '4px'
+		      div.style.whiteSpace = 'nowrap'
+		      div.style.MozUserSelect = 'none'
+		      div.style.fontSize = '0.13rem'
+		      div.style.borderRadius = '4px'
+
+
+		      div.appendChild(span)
+		      span.appendChild(document.createTextNode(this._text))
+		      span.style.color = 'white'
+		      span.style.lineHeight = '10px'
+		      span.style.margin = '8px'
+
+		      arrow.className = 'arrow'
+
+		      arrow.style.position = 'absolute'
+		      arrow.style.width = '6px'
+		      arrow.style.height = '6px'
+		      arrow.style.right = '0px'
+		      arrow.style.left = '0px'
+		      arrow.style.bottom = '-4px'
+		      arrow.style.overflow = 'hidden'
+		      arrow.style.transform = 'rotate(45deg)'
+		      arrow.style.border = '1px solid  #EE5D5B'
+		      arrow.style.borderTop = 'none!important'
+		      arrow.style.borderLeft = 'none!important'
+		      arrow.style.backgroundColor = '#EE5D5B'
+		      arrow.style.margin = 'auto'
+		      div.appendChild(arrow)
+
+
+		      that.map.getPanes().labelPane.appendChild(div)
+
+		      return div
+		    }
+		    ComplexCustomOverlay.prototype.draw = function() {
+			    var map = this._map
+			    var pixel = map.pointToOverlayPixel(this._point)
+
+			    this._div.style.left = (pixel.x - parseInt(this._arrow.style.left,0)) + 'px'
+	      		this._div.style.top = (pixel.y - 35) + 'px'
+		    }
+
+		    return ComplexCustomOverlay
+		},
+		zoomIn() {
+			let zoom = this.map.getZoom()
+
+			this.map.setZoom(++zoom)
+		},
+		zoomOut() {
+			let zoom = this.map.getZoom()
+
+			this.map.setZoom(--zoom)
 		}
 	},
 	watch: {
@@ -309,10 +441,11 @@ export default {
 
 			Object.keys(this.search_options).forEach(function(key) {
 				if (key === '面积') {
-					let reg = /㎡$/
 
-					that.filter_options.area = that.search_options[key].replace(reg,'').split('-')
-					that.bs = that.map.getBounds()
+
+					that.search_options[key] !== '不限' ? that.regxArea(key) : that.filter_options.area = []
+
+
 				} else if (key === '区域') {
 
 					let myGeo = new BaiduMap.Geocoder()
@@ -323,12 +456,9 @@ export default {
 					myGeo.getPoint(that.search_options[key], function(pointAddress) {
 
 						let point = new BaiduMap.Point(pointAddress.lng,pointAddress.lat)		// 创建中心点坐标
-						let marker = new BaiduMap.Marker(point) // 创建标注
 
 
 						that.map.centerAndZoom(point,13)							// 初始化地图，设置中心点坐标和地图级别
-
-						that.map.addOverlay(marker)
 
 						that.bs = that.map.getBounds()
 
@@ -350,6 +480,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 @import '../../styles/common';
+@import '../../styles/loading';
 .nav-section{
 	@include wh(100%,auto);
 	z-index: 999;
@@ -488,9 +619,70 @@ export default {
 		z-index: 2;
 	}
 }
-#allmap{
-	width: 100%;
-	height: px2rem(1000);
+.map{
+	#allmap{
+		width: 100%;
+		height: px2rem(1000);
+		.arrow{
+			color: white;
+		}
+	}
+	.zoom-bar-wrap{
+		position: absolute;
+	    right: 15px;
+	    bottom: 75px;
+	    height: 92px;
+	    width: 40px;
+	    border-radius: 6px;
+	    background: #fff;
+	    border: solid 1px #e6e6e6;
+	    overflow: hidden;
+	    section{
+	    	height: 50%;
+		    width: 100%;
+		    border-top: solid 1px #e6e6e6;
+		    margin-top: -1px;
+		    position: relative;
+	    }
+	}
 }
+.toast{
+	.toast-fade-enter-active {
+	  transition: all .3s ease;
+	}
+	.toast-fade-leave-active {
+	  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+	}
+	.toast-fade-enter, .slide-fade-leave-to
+	/* .slide-fade-leave-active for below version 2.1.8 */ {
+	  transform: translateX(10px);
+	  opacity: 0;
+	}
 
+	.text{
+		padding: (50rem/$num);
+		background-color: rgba(51,51,51,.9);
+		position: fixed;
+		bottom: 10%;
+		left: 50%;
+		-webkit-transform: translate(-50%,-50%);
+		border-radius: (20rem/$num);
+		color: #ffffff;
+		margin-top: 0.06rem;
+	    font-size: 0.1rem;
+	    line-height: 1.2;
+	}
+	.toast_mask{
+		background:rgba(0,0,0,0.3);
+		z-index: 98;
+		width: 100%;
+		left: 100%;
+		position: fixed;
+		top: 0px;
+		left: 0px;
+		right: 0px;
+		bottom: 0px;
+		margin: 0 auto;
+	}
+}
 </style>
