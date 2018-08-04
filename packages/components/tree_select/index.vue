@@ -57,7 +57,8 @@ export default {
 	data() {
 		return {
 			box_mask: false,
-			nav_index: 5
+			nav_index: 5,
+			search_options: ''
 		}
 	},
 	created() {
@@ -70,9 +71,9 @@ export default {
 			return selectArea.children || {}
 		},
 		area_submenu() {
-			
+
 			const selectSubArea = this.area_menu[this.items[this.nav_index].menu_index] || {}
-			
+
 			return selectSubArea.sub_children || {}
 		},
 		mainWidth() {
@@ -114,7 +115,7 @@ export default {
 	methods: {
 		changeActive(index) {
 			this.nav_index = this.nav_index === index ? 5 : index
-			this.box_mask = true
+			this.box_mask = this.nav_index === index
 		},
 		changeNav(index,value) {
 			this.items[this.nav_index].menu_index = index
@@ -136,14 +137,11 @@ export default {
 		change_mask() {
 			this.box_mask = !this.box_mask
 			this.nav_index = 5
-		},
-		emitSearchOptions() {
-			this.$emit('itemclick', { ...this.search_options })
 		}
 	},
 	watch: {
 		search_options() {
-			this.$emit('itemclick', { ...this.search_options })
+			this.$emit('onGetOptions', { ...this.search_options })
 		}
 	}
 

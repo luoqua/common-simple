@@ -1,7 +1,7 @@
 <template>
 	<tree-select
 		:items="items"
-		@itemclick="onItemClick"
+		@onGetOptions="onGetOptions"
 	/>
 </template>
 
@@ -132,7 +132,7 @@ export default {
 		}
 	},
 	methods: {
-		onItemClick(data) {
+		onGetOptions(data) {
 	      console.log(data)
 	    }
 	}
