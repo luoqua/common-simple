@@ -61,9 +61,6 @@ export default {
 			search_options: ''
 		}
 	},
-	created() {
-		console.log(this.items)
-	},
 	computed: {
 		area_menu() {
 			const selectArea = this.items[this.nav_index] || {}

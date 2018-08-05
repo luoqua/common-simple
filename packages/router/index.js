@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Index from '@/components/tree_select/demo/demo'
+import Index from '@/components/baidu_map/demo/demo'
 
 Vue.use(Router)
 
