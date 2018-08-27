@@ -1,6 +1,6 @@
 <template>
-	<section class="map">
-  		<section id="allmap" :style="{ height: mapHeight + 'px' }"></section>
+	<section class="map" id="map" :style="{ height: mapHeight + 'px' }">
+  		<section id="allmap" ></section>
   		<section class="navIcon-wrap" id="GPSId" @click="getLocation()">
 		  <section class="navIcon"></section>
 		</section>
@@ -18,76 +18,52 @@ import BaiduMap from 'BaiduMap'
 
 export default{
 	name: 'baidu-map',
+	props: {
+		centerPoint: {
+			type: Object,
+			required: true
+		}
+	},
 	data() {
 		return {
-			mapHeight: '',
-			map: '',
-			bs: ''
+			mapHeight: ''
 		}
 	},
 	mounted() {
 		this.initMap()								// 初始化地图
 		this.resizeMapHeight()						// 初始化设置地图高度
-		this.initMapData()
 		this.map.addEventListener('zoomend',this.move_or_zoom)	// 绑定缩放事件
 		this.map.addEventListener('dragend',this.move_or_zoom)	// 绑定拖拽事件
-		this.getLocation()
 	},
 	methods: {
 		initMap() {
 			this.map = new BaiduMap.Map('allmap')						// 创建地图实例
-			let point = new BaiduMap.Point(120.343373,31.540212)		// 创建中心点坐标
+			let point = new BaiduMap.Point(this.centerPoint.lng,this.centerPoint.lat)				// 创建中心点坐标
+			let mk = new BaiduMap.Marker(point)
+
+
+			this.map.addOverlay(mk)
+			this.map.panTo(this.centerPoint)
 
 			this.map.centerAndZoom(point,16)							// 初始化地图，设置中心点坐标和地图级别
-
-
-		},
-		initMapData() {
-			this.bs = this.map.getBounds() // 获取可视区域
-
-			let bssw = this.bs.getSouthWest() // 可视区域左下角
-			let bsne = this.bs.getNorthEast() // 可视区域右上角
-
-			// this.get_site_data_lat(bssw,bsne)
-
-		},
-		addMarker(pointData) {
-			var point = new BaiduMap.Point(pointData.lng, pointData.lat)
-			let ComplexCustomOverlay = this.mapaddOverlay()
-			var txt = pointData.address + pointData.area + '㎡'
-
-
-		    var myCompOverlay = new ComplexCustomOverlay(point, txt)
-
-		    this.map.addOverlay(myCompOverlay)
+			this.$emit('initData',this.map)
+			this.move_or_zoom()
 		},
 		move_or_zoom() {
-			this.bs = this.map.getBounds()
+			this.$emit('moveOrZoom')
 
 		},
 		resizeMapHeight() {
 			var resizeEvent = 'orientationchange' in window ? 'orientationchange' : 'resize'
 			var that = this
-			let oallmap = document.getElementById('allmap')
+			let oallmap = document.getElementById('map')
 
 			that.mapHeight = document.documentElement.clientHeight - oallmap.offsetTop
 
 			window.addEventListener(resizeEvent, function() {
 
 				that.mapHeight = document.documentElement.clientHeight - oallmap.offsetTop
-
 			}, false)
-		},
-		getLocation() {
-			let geoLocation = new BaiduMap.Geolocation()
-			let that = this
-
-			geoLocation.getCurrentPosition(function(r) {
-				var mk = new BaiduMap.Marker(r.point)
-				that.map.addOverlay(mk)
-				that.map.panTo(r.point)
-			})
-
 		},
 		zoomIn() {
 			let zoom = this.map.getZoom()
@@ -98,6 +74,21 @@ export default{
 			let zoom = this.map.getZoom()
 
 			this.map.setZoom(--zoom)
+		},
+		getLocation() {
+			let geoLocation = new BaiduMap.Geolocation()
+			let that = this
+			let promise = new Promise(function(resolve,rejected) {
+				geoLocation.getCurrentPosition(function(r) {
+					resolve(r)
+				},{enableHighAccuracy: true})
+			})
+
+			promise.then(function(data) {
+				let mk = new BaiduMap.Marker(data.point)
+				that.map.addOverlay(mk)
+				that.map.panTo(data.point)
+			})
 		}
 
 	}
@@ -105,10 +96,12 @@ export default{
 </script>
 
 <style lang="scss" scoped>
+@import '../../styles/common';
 .map{
+	height: px2rem(1334);
 	#allmap{
 		width: 100%;
-		height: px2rem(1000);
+		height: 100%;
 		.arrow{
 			color: white;
 		}

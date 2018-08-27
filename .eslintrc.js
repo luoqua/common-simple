@@ -168,7 +168,7 @@ module.exports = {
     "no-floating-decimal": 2,//禁止省略浮点数中的0 .5 3.
     "no-func-assign": 2,//禁止重复的函数声明
     "no-implicit-coercion": 1,//禁止隐式转换
-    "no-implied-eval": 2,//禁止使用隐式eval
+    "no-implied-eval": 1,//禁止使用隐式eval
     "no-inline-comments": 0,//禁止行内备注
     "no-inner-declarations": [2, "functions"],//禁止在块语句中使用声明（变量或函数）
     "no-invalid-regexp": 2,//禁止无效的正则表达式
@@ -198,7 +198,7 @@ module.exports = {
     "no-obj-calls": 2,//不能调用内置的全局对象，比如Math() JSON()
     "no-octal": 2,//禁止使用八进制数字
     "no-octal-escape": 2,//禁止使用八进制转义序列
-    "no-param-reassign": 2,//禁止给参数重新赋值
+    "no-param-reassign": 0,//禁止给参数重新赋值
     "no-path-concat": 0,//node中不能使用__dirname或__filename做路径拼接
     "no-plusplus": 0,//禁止使用++，--
     "no-process-env": 0,//禁止使用process.env
@@ -241,7 +241,7 @@ module.exports = {
     "block-scoped-var": 0,//块语句中使用var
     "brace-style": [1, "1tbs"],//大括号风格
     "callback-return": 1,//避免多次调用回调什么的
-    "camelcase": 2,//强制驼峰法命名
+    "camelcase": 0,//强制驼峰法命名
     "comma-dangle": [2, "never"],//对象字面量项尾不能有逗号
     "comma-spacing": 0,//逗号前后的空格
     "comma-style": [2, "last"],//逗号风格，换行时在行首还是行尾

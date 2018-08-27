@@ -1,31 +1,128 @@
 <template>
-	<baidu-map
-	:centerPoint = "centerPoint"
-	:zoomScale = "zoomScale"
-	@initData = "initData"
-	@moveOrZoom = "moveOrZoom"
-	v-if="flag" />
+	<section >
+		<tree-select
+			:items="items"
+			@onGetOptions="onGetOptions"
+		/>
+		<baidu-map
+		:centerPoint = "centerPoint"
+		:zoomScale = "zoomScale"
+		@initData = "initData"
+		@moveOrZoom = "moveOrZoom"
+		v-if="flag" />
+	</section>
 </template>
 
 <script>
 import { Fetch } from '@/utils/common.js'
+import treeSelect from '@/components/tree_select/index.vue'
+import baiduMap from '@/components/baidu_map/index.vue'
 import BaiduMap from 'BaiduMap'
-import baiduMap from '../index.vue'
 
 export default {
 	data() {
 		return {
+			data: [{
+				group1: '区域',
+				group2: '按区域',
+				area1: [{
+					text: '全部',
+					id: 1001
+				}, {
+					text: '附近',
+					id: 1002
+				}, {
+					text: '滨湖区',
+					id: 1003
+				}, {
+					text: '新吴区',
+					id: 1004
+				}, {
+					text: '锡山区',
+					id: 1004
+				}, {
+					text: '宜兴市',
+					id: 1004
+				}, {
+					text: '江阴市',
+					id: 1004
+				}, {
+					text: '梁溪区',
+					id: 1004
+				}, {
+					text: '常州市',
+					id: 1004
+				}]
+			},
+			{
+				group1: '面积',
+				area1: [{
+					text: '不限',
+					id: 1001
+				}, {
+					text: '80-90㎡',
+					id: 1002
+				}, {
+					text: '90-100㎡',
+					id: 1003
+				}, {
+					text: '100-110㎡',
+					id: 1004
+				}, {
+					text: '110-120㎡',
+					id: 1004
+				}, {
+					text: '120-130㎡',
+					id: 1004
+				}, {
+					text: '130-140㎡',
+					id: 1004
+				}, {
+					text: '140-180㎡',
+					id: 1004
+				}]
+			},
+			{
+				group1: '类型',
+				area1: [{
+					text: '在建工地',
+					id: 1001
+				}, {
+					text: '完工工地',
+					id: 1002
+				}]
+			},
+			{
+				group1: '更多',
+				area1: [{
+					text: '在建工地',
+					id: 1001
+				}, {
+					text: '完工工地',
+					id: 1002
+				}]
+			}
+			],
+			nav_index: 5,
 			initPoint: {},
 			zoomScale: 16,
 			centerPoint: '',
 			flag: false,
 			resultLatLng: '',
 			filter_options: {},
-			bs: ''
+			bs: '',
+			search_options: ''
 		}
 	},
 	created() {
 		this.getLocation()
+	},
+	mounted() {
+
+	},
+	components: {
+		treeSelect,
+		baiduMap
 	},
 	watch: {
 		initPoint() {
@@ -36,39 +133,119 @@ export default {
 			let bsne = this.bs.getNorthEast() // 可视区域右上角
 
 			this.get_site_data_lat(bssw,bsne)
+		},
+		search_options() {
+			let that = this
+
+			Object.keys(this.search_options).forEach(function(key) {
+				if (key === '面积') {
+
+
+					that.search_options[key].text !== '不限' ? that.regxArea(key) : that.filter_options.area = []
+
+
+				} else if (key === '区域') {
+
+					let myGeo = new BaiduMap.Geocoder()
+
+					if (that.search_options[key].text === '全部') {
+						that.search_options[key].text = '无锡市'
+					}
+					myGeo.getPoint(that.search_options[key].text, function(pointAddress) {
+
+						let point = new BaiduMap.Point(pointAddress.lng,pointAddress.lat)		// 创建中心点坐标
+
+
+						that.map.centerAndZoom(point,13)							// 初始化地图，设置中心点坐标和地图级别
+
+						that.bs = that.map.getBounds()
+
+					}, '无锡市')
+				} else if (key === '类型') {
+					let bssw = that.bs.getSouthWest() // 可视区域左下角
+					let bsne = that.bs.getNorthEast() // 可视区域右上角
+
+					that.search_options[key].text === '完工工地' ?
+						that.FetchData(bssw,bsne,'http://192.168.1.161:3000/get_site_data_lat') :
+						that.FetchData(bssw,bsne)
+				}
+			})
+
 		}
 	},
-	components: {
-		baiduMap
+	computed: {
+		items() {
+			let itemsData = this.data
+			let OitemsField = [
+			        'text',
+			        'type',
+			        'menu_index',
+			        'sub_nav_index',
+			        'children'
+			      ]
+
+			itemsData = itemsData.map(function(items) {
+
+		        let Oitems = {}
+		        let options = items.group1 !== undefined && (items.group2 || items.group3)
+		        let [
+		            text,
+		            type,
+		            menu_index,
+		            sub_nav_index,
+		            children] = [items.group1,options ? 'menu_select' : 'menu_list',0,'',options ? [{sub_text: items.group2,sub_children: items.area1}] : items.area1]
+
+		        let aa = [
+		            text,
+		            type,
+		            menu_index,
+		            sub_nav_index,
+		            children]
+
+		          OitemsField.forEach(function(item,index) {
+		              Oitems[item] = aa[index]
+		          })
+		          return Oitems
+
+      		})
+			return itemsData
+		}
 	},
 	methods: {
+		onGetOptions(data) {
+			this.search_options = data
+	    },
 		initData(map) {
 			this.map = map
 		},
 		get_site_data_lat(bssw,bsne) {
-			let that = this
 
 			this.loading = true
-			if (that.resultLatLng !== '') {
-				that.filterData(that.resultLatLng,bssw,bsne)
+			if (this.resultLatLng !== '') {
+				this.filterData(this.resultLatLng,bssw,bsne)
 			} else {
+				this.FetchData(bssw,bsne)
 
-				let opitions = {
+    		}
+		},
+		FetchData(bssw,bsne,url = 'http://192.168.1.161:3000/get_site_now_lat') {
+			let that = this
+
+			let opitions = {
 		            method: 'POST',
 		            body: {
-						status: 0
+					status: 0
 		            }
 		        }
 
-				Fetch('http://192.168.1.161:3000/get_site_now_lat', opitions)
+			Fetch(url, opitions)
 		      	.then((data) => {
 			        if (data !== null) {
 
-				        	that.resultLatLng = data
-							that.filterData(data,bssw,bsne)
-						}
+				        that.resultLatLng = data
+						that.filterData(data,bssw,bsne)
+					}
 	    		})
-    		}
 		},
 		filterData(data,bssw,bsne) {
 			// 进行lat的过滤
@@ -100,7 +277,15 @@ export default {
 			})
 			clearTimeout(this.timer)
 		},
+		regxArea(key) {
+			let reg = /㎡$/
 
+			this.filter_options.area = this.search_options[key].text.replace(reg,'').split('-')
+			let bssw = this.bs.getSouthWest() // 可视区域左下角
+			let bsne = this.bs.getNorthEast() // 可视区域右上角
+
+			this.get_site_data_lat(bssw,bsne)
+		},
 		addMarker(pointData) {
 			var point = new BaiduMap.Point(pointData.lng, pointData.lat)
 			let ComplexCustomOverlay = this.mapaddOverlay()
