@@ -78,6 +78,7 @@ module.exports = {
     //代码风格优化
     "no-else-return": 1,                      //在else代码块中return，else是多余的
     "no-multi-spaces": 1,                     //不允许多个空格
+    "no-multi-assign": 0,
     "block-scoped-var": 2,                    //变量应在外部上下文中声明，不应在{}代码块中
     "consistent-return": 2,                   //函数返回值可能是不同类型
     "accessor-pairs": 2,                      //object getter/setter方法需要成对出现

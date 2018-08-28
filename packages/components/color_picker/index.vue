@@ -8,12 +8,15 @@
             <div class="ui-clearfix" style="padding-bottom: 16px;">
                 <div>
                     <div class="saturationWrap" style="width: 140px; height: 104px; position: relative; margin-right: 12px; margin-bottom: 10px; border-radius: 2px 2px 0px 0px; float: left; overflow: hidden;">
-                        <div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; background: rgb(255, 0, 0);" :style="leftWrapStyle" ref="leftWrap">
-                            <div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; background: linear-gradient(to right, rgb(255, 255, 255), rgba(255, 255, 255, 0));">
+                        <div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; background: rgb(255, 0, 0);" :style="leftWrapStyle"
+                            ref="leftWrap"
+                            @click="leftClick($event)"
+                            >
+                            <div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; background: linear-gradient(to right, rgb(255, 255, 255), rgba(255, 255, 255, 0));" >
                                 <div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; background: linear-gradient(to top, rgb(0, 0, 0), rgba(0, 0, 0, 0));"></div>
                                 <div style="position: absolute;  cursor: default;" ref="leftPointer" :style="leftPointerStyle">
                                     <div class="Twitter__pickerChromePointerCircle-1cJlb"
-                                                @mousedown="onmousedownLeft($event)"></div>
+                                                v-drag:leftPointer="leftdrag"></div>
                                 </div>
                             </div>
                         </div>
@@ -21,10 +24,10 @@
                     <div class="hueWrap" style="height: 104px; width: 12px; float: left; position: relative;">
                         <div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; background: linear-gradient(to top, rgb(255, 0, 0) 0%, rgb(255, 255, 0) 17%, rgb(0, 255, 0) 33%, rgb(0, 255, 255) 50%, rgb(0, 0, 255) 67%, rgb(255, 0, 255) 83%, rgb(255, 0, 0) 100%);">
                             <div style="margin: 0px 2px; position: relative; height: 100%;" ref="rightPicker"
-                                @click="movePointer($event)">
+                                @click="clickPointer($event)">
                                 <div style="position: absolute; left: 0px; top: 100%;z-index:222" :style = "pointerStyle" ref="rightPointer">
                                     <div class="Twitter__pickerChromePointer-vCGnu" style="position:relative;z-index:222"
-                                    	v-drag:rightPointer="leftmouse"
+                                    	v-drag:rightPointer="rightdrag"
                                     ></div>
                                 </div>
                             </div>
@@ -32,9 +35,11 @@
                     </div>
                 </div>
             </div>
-
+            <div style="height: 16px; width: 16px; float: left; color: rgb(152, 161, 164); display: flex; align-items: center; justify-content: center; text-indent: -400em; margin-top: 3px; margin-right: 8px; border: 1px solid rgb(159, 100, 100);"
+                :style="currentColor"
+                >#</div>
             <div style="position: relative;">
-                <input value="" placeholder="ff691f" style="width: 143px; font-size: 14px; color: rgb(154, 156, 161); border: 0px; outline: none; height: 24px; box-shadow: rgb(228, 230, 235) 0px 0px 0px 1px inset; border-radius: 0px 2px 2px 0px; float: left; padding-left: 8px;">
+                <input v-model="hexValue" placeholder="ff691f" style="width: 143px; font-size: 14px; color: rgb(154, 156, 161); border: 0px; outline: none; height: 24px; box-shadow: rgb(228, 230, 235) 0px 0px 0px 1px inset; border-radius: 0px 2px 2px 0px; float: left; padding-left: 8px;">
             </div>
             <div style="clear: both;"></div>
         </div>
@@ -56,14 +61,56 @@ export default{
 			}
 		},
 		leftWrapStyle() {
+			console.log(this.RGB)
 			return {
-				background: `rgb(${this.RGB.r},${this.RGB.g},${this.RGB.b})`
+				backgroundColor: `#${this.HSBToHex(this.rightHSB)}`
 			}
 		},
 		leftPointerStyle() {
 			return {
 				left: (Math.round(this.leftLeft * 10000) / 100).toFixed(4) + '%',
 				top: (Math.round(this.leftTop * 10000) / 100).toFixed(4) + '%'
+
+			}
+		},
+		HSB() {
+			return {
+				h: parseInt((1 - this.rightTop) * 360,10),
+				s: parseInt(this.leftLeft * 100,10),
+				b: parseInt((1 - this.leftTop) * 100,10)
+			}
+		},
+		RGB() {
+			if (this.HSB !== undefined) {
+				return this.HSBToRGB(this.HSB)
+			}
+		},
+		rightHSB() {
+			return {
+				h: parseInt((1 - this.rightTop) * 360,10),
+				s: 100,
+				b: 100
+			}
+		},
+		currentColor() {
+			return {
+				backgroundColor: `#${this.HSBToHex(this.HSB)}`,
+				border: `1px solid #${this.HSBToHex(this.HSB)}`
+			}
+		}
+	},
+	watch: {
+		hexValue() {
+			let reg = /^[0-9a-fA-F]+$/
+
+			if (reg.test(this.hexValue)) {
+				let hsb = this.HexToHSB(this.hexValue)
+
+				this.rightTop = 1 - (hsb.h / 360)
+
+				this.leftLeft = hsb.s / 100
+
+				this.leftTop = 1 - (hsb.b / 100)
 
 			}
 		}
@@ -80,63 +127,26 @@ export default{
 			leftLeft: 0.5,
 			leftTop: 0.5,
 			clickable: true,
-			HSB: {
-				h: 0,
-				s: 100,
-				b: 100
-			},
-			RGB: {
-				r: 255,
-				g: 0,
-				b: 0
-			}
+			hexValue: ''
 		}
 	},
 	mounted() {
 		this.initialize()
 	},
 	methods: {
-		onmousedown(ev) {
-			ev = ev || window.event
-			this.startX = ev.clientX - ev.target.offsetLeft
-			this.startY = ev.clientY - ev.target.offsetTop
-			this.startTop = this.toPoint(this.$refs.rightPointer.style.top)
+		rightdrag(x,y,top) {
 
-			let that = this
+			const offsetY = y > 0 ? Math.max(0,Math.min(this.rightHeight * top,y)) :
+				-Math.max(0,Math.min(this.rightHeight * (1 - top),Math.abs(y)))
 
-			document.onmousemove = function(ev_move) {
-				ev_move = ev_move || window.event
-
-				that.clickable = false
-
-				that.deltaX = that.startX - ev_move.clientX
-
-				that.deltaY = that.startY - ev_move.clientY
-
-				const offsetY = that.deltaY > 0 ? Math.max(0,Math.min(that.rightHeight * that.startTop,that.deltaY)) :
-					-Math.max(0,Math.min(that.rightHeight * (1 - that.startTop),Math.abs(that.deltaY)))
+			const rightTop = ((this.rightHeight * top) - offsetY) / this.rightHeight
 
 
-				const rightTop = (that.rightHeight * that.startTop - offsetY) / that.rightHeight
-
-
-				if ((that.deltaY > 0 && rightTop >= 0) || (that.deltaY < 0 && rightTop <= 1)) {
-					that.rightTop = rightTop
-					that.HSB.h = parseInt((1 - that.rightTop) * 360,10)
-					that.RGB = that.HSBToRGB(that.HSB)
-
-				}
-
-				return false
+			if ((y > 0 && rightTop >= 0) || (y < 0 && rightTop <= 1)) {
+				this.rightTop = rightTop
 			}
-
-			document.onmouseup = function() {
-				document.onmousemove = null
-				document.onmouseup = null
-			}
-
 		},
-		movePointer(ev) {
+		clickPointer(ev) {
 			if (ev.target === this.$refs.rightPicker) {
 
 				ev.stopPropagation()
@@ -148,57 +158,50 @@ export default{
 				const offsetY = ev.clientY - this.clickY
 
 				this.rightTop = offsetY / this.rightHeight
-
-				this.HSB.h = parseInt((1 - this.rightTop) * 360,10)
-
-				this.RGB = this.HSBToRGB(this.HSB)
-
 			}
 
 		},
-		onmousedownLeft(ev) {
-			ev = ev || window.event
+		leftdrag(x,y,top,left) {
+			const offsetX = x > 0 ? Math.max(0,Math.min(this.leftWidth * left,x)) :
+				-Math.max(0,Math.min(this.leftWidth * (1 - left),Math.abs(x)))
 
-			this.leftstartX = ev.clientX - ev.target.offsetLeft
-			this.leftstartY = ev.clientY - ev.target.offsetTop
-
-			this.leftstartTop = this.toPoint(this.$refs.leftPointer.style.top)
-			this.leftstartLeft = this.toPoint(this.$refs.leftPointer.style.left)
-
-			let that = this
-
-			document.onmousemove = function(ev_move) {
-				ev = ev || window.event
-
-				that.leftdeltaX = that.leftstartX - ev_move.clientX
-
-				that.leftdeltaY = that.leftstartY - ev_move.clientY
+			const offsetY = y > 0 ? Math.max(0,Math.min(this.leftHeight * top,y)) :
+				-Math.max(0,Math.min(this.leftHeight * (1 - top),Math.abs(y)))
 
 
-				const offsetX = that.leftdeltaX > 0 ? Math.max(0,Math.min(that.leftWidth * that.leftstartLeft,that.leftdeltaX)) :
-					-Math.max(0,Math.min(that.leftWidth * (1 - that.leftstartLeft),Math.abs(that.leftdeltaX)))
+			const leftTop = ((this.leftHeight * top) - offsetY) / this.leftHeight
 
-				const offsetY = that.leftdeltaY > 0 ? Math.max(0,Math.min(that.leftHeight * that.leftstartTop,that.leftdeltaY)) :
-					-Math.max(0,Math.min(that.leftHeight * (1 - that.leftstartTop),Math.abs(that.leftdeltaY)))
+			const leftLeft = ((this.leftWidth * left) - offsetX) / this.leftWidth
+
+			this.leftTop = leftTop
+
+			this.leftLeft = leftLeft
 
 
-				const leftTop = (that.leftHeight * that.leftstartTop - offsetY) / that.leftHeight
+			console.log(this.HSB)
+		},
+		leftClick(ev) {
 
-				const leftLeft = (that.leftWidth * that.leftstartLeft - offsetX) / that.leftWidth
+			if (ev.currentTarget === this.$refs.leftWrap) {
 
-				that.leftTop = leftTop
+				ev.stopPropagation()
 
-				that.leftLeft = leftLeft
+				this.startTop = this.toPoint(this.$refs.leftWrap.style.top)
 
-				return false
+				this.startLeft = this.toPoint(this.$refs.leftWrap.style.left)
+
+				let clickX = this.$refs.leftWrap.getBoundingClientRect().left + document.documentElement.scrollLeft
+
+				let clickY = this.$refs.leftWrap.getBoundingClientRect().top + document.documentElement.scrollTop
+
+				const offsetY = ev.clientY - clickY
+
+				const offsetX = ev.clientX - clickX
+
+				this.leftTop = offsetY / this.leftHeight
+
+				this.leftLeft = offsetX / this.leftWidth
 			}
-
-			document.onmouseup = function() {
-				document.onmousemove = null
-				document.onmouseup = null
-				that.clickable = true
-			}
-
 		},
 		initialize() {
 			const rect = this.$refs.rightPicker.getBoundingClientRect()
@@ -220,17 +223,17 @@ export default{
 		HSBToRGB(hsb) {
 			var rgb = {}
 			var h = Math.round(hsb.h)
-			var s = Math.round(hsb.s * 255 / 100)
-			var v = Math.round(hsb.b * 255 / 100)
+			var s = Math.round((hsb.s * 255) / 100)
+			var v = Math.round((hsb.b * 255) / 100)
 
-			if (s == 0) {
+			if (s === 0) {
 				rgb.r = rgb.g = rgb.b = v
 			} else {
-				var t1 = v
-				var t2 = (255 - s) * v / 255
-				var t3 = (t1 - t2) * (h % 60) / 60
+				let t1 = v
+				let t2 = ((255 - s) * v) / 255
+				let t3 = ((t1 - t2) * (h % 60)) / 60
 
-				if (h == 360) {
+				if (h === 360) {
 					h = 0
 				}
 				if (h < 60) {
@@ -251,31 +254,89 @@ export default{
 			}
 			return {r: Math.round(rgb.r), g: Math.round(rgb.g), b: Math.round(rgb.b)}
 		},
-		leftmouse(x,y,top,left) {
-
-			const offsetY = y > 0 ? Math.max(0,Math.min(this.rightHeight * top,y)) :
-				-Math.max(0,Math.min(this.rightHeight * (1 - top),Math.abs(y)))
-
-
-			const rightTop = (this.rightHeight * top - offsetY) / this.rightHeight
-
-
-			if ((y > 0 && rightTop >= 0) || (y < 0 && rightTop <= 1)) {
-				this.rightTop = rightTop
-				this.HSB.h = parseInt((1 - this.rightTop) * 360,10)
-				this.RGB = this.HSBToRGB(this.HSB)
-
+		RGBToHSB(rgb) {
+			var hsb = {
+				h: 0,
+				s: 0,
+				b: 0
 			}
+			var min = Math.min(rgb.r, rgb.g, rgb.b)
+			var max = Math.max(rgb.r, rgb.g, rgb.b)
+			var delta = max - min
+
+			hsb.b = max
+			hsb.s = max !== 0 ? (255 * delta) / max : 0
+			if (hsb.s !== 0) {
+				if (rgb.r === max) {
+					hsb.h = (rgb.g - rgb.b) / delta
+				} else if (rgb.g === max) {
+					hsb.h = 2 + ((rgb.b - rgb.r) / delta)
+				} else {
+					hsb.h = 4 + ((rgb.r - rgb.g) / delta)
+				}
+			} else {
+				hsb.h = -1
+			}
+			hsb.h *= 60
+			if (hsb.h < 0) {
+				hsb.h += 360
+			}
+			hsb.s *= 100 / 255
+			hsb.b *= 100 / 255
+			return hsb
+		},
+		RGBToHex(rgb) {
+			var hex = [
+				rgb.r.toString(16),
+				rgb.g.toString(16),
+				rgb.b.toString(16)
+			]
+
+			hex.forEach(function(val, nr) {
+				if (val.length === 1) {
+					hex[nr] = '0' + val
+				}
+			})
+			return hex.join('')
+		},
+		HSBToHex(hsb) {
+			return this.RGBToHex(this.HSBToRGB(hsb))
+		},
+		HexToRGB(hex) {
+			var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i
+
+		    hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+		        return r + r + g + g + b + b
+		    })
+		    let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+
+		    let rgb = result ? {
+		    	r: parseInt(result[1], 16),
+		    	g: parseInt(result[2], 16),
+		    	b: parseInt(result[3], 16)
+		    } : hex
+
+		    return rgb
+
+		},
+		HexToHSB(hex) {
+			return this.RGBToHSB(this.HexToRGB(hex))
 		}
 	},
 	directives: {
 		drag: {
 			inserted(el,binding,vnode) {
 				let valFunc = binding.value
-				let modify = binding.modifiers
 				let args = binding.arg
 
-                args = vnode.context.$refs[args]
+				args = vnode.context.$refs[args]
+
+				function toPoint(percent) {
+					var str = percent.replace('%','')
+
+					str = str / 100
+					return str
+				}
 
 				el.onmousedown = function(ev) {
 					ev = ev || window.event
@@ -302,12 +363,6 @@ export default{
 					}
 				}
 
-				function toPoint(percent) {
-					var str = percent.replace('%','')
-
-					str = str / 100
-					return str
-				}
 			}
 		}
 	}
@@ -331,7 +386,7 @@ export default{
 }
 
 .Twitter__body-3csza {
-    padding: 20px 15px 20px 20px
+    padding: 20px 20px 20px 20px
 }
 
 .Twitter__tab-vqD8I {
