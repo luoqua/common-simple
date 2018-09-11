@@ -6,7 +6,57 @@
         <div class="Twitter__body-3csza">
             <div class="Twitter__tab-vqD8I"><span class="">基本色</span><span class="DividingLine__border-1DzBr"></span><span class="Twitter__active-3TNoY">更多颜色</span></div>
             <div class="ui-clearfix" style="padding-bottom: 16px;">
-                <div>
+
+            <template>
+            	<div title="#FFFFFF" style="background: rgb(255, 255, 255); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: 1px solid rgb(228, 230, 235);"></div>
+			    <div title="#7A7A7A" style="background: rgb(122, 122, 122); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#FF8D87" style="background: rgb(255, 141, 135); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#FFD278" style="background: rgb(255, 210, 120); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#FFF39C" style="background: rgb(255, 243, 156); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#C3F2BD" style="background: rgb(195, 242, 189); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#9CF0E2" style="background: rgb(156, 240, 226); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#9EDDFF" style="background: rgb(158, 221, 255); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#FFC4F5" style="background: rgb(255, 196, 245); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#F5F5F5" style="background: rgb(245, 245, 245); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#5C5C5C" style="background: rgb(92, 92, 92); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#F8615B" style="background: rgb(248, 97, 91); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#FFB23D" style="background: rgb(255, 178, 61); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#FFEB4C" style="background: rgb(255, 235, 76); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#8DE080" style="background: rgb(141, 224, 128); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#5BDEC8" style="background: rgb(91, 222, 200); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#63BCFF" style="background: rgb(99, 188, 255); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#FA8CF5" style="background: rgb(250, 140, 245); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#D7D7D7" style="background: rgb(215, 215, 215); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#3D3D3D" style="background: rgb(61, 61, 61); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#DE2821" style="background: rgb(222, 40, 33); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#ED8D18" style="background: rgb(237, 141, 24); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#FAD902" style="background: rgb(250, 217, 2); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#45BA4E" style="background: rgb(69, 186, 78); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#0AC2A9" style="background: rgb(10, 194, 169); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#2F8EED" style="background: rgb(47, 142, 237); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#D259D4" style="background: rgb(210, 89, 212); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#B8B8B8" style="background: rgb(184, 184, 184); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#1E1E1E" style="background: rgb(30, 30, 30); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#99241E" style="background: rgb(153, 36, 30); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#B8571B" style="background: rgb(184, 87, 27); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#D9A61A" style="background: rgb(217, 166, 26); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#348C45" style="background: rgb(52, 140, 69); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#1D8A7F" style="background: rgb(29, 138, 127); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#1E64A6" style="background: rgb(30, 100, 166); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#8C418F" style="background: rgb(140, 65, 143); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#999999" style="background: rgb(153, 153, 153); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#000000" style="background: rgb(0, 0, 0); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#59231F" style="background: rgb(89, 35, 31); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#733E24" style="background: rgb(115, 62, 36); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#9E6B1F" style="background: rgb(158, 107, 31); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#20632E" style="background: rgb(32, 99, 46); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#2A5E5D" style="background: rgb(42, 94, 93); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#264869" style="background: rgb(38, 72, 105); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+			    <div title="#593059" style="background: rgb(89, 48, 89); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+
+            </template>
+
+                <div style="display:none">
                     <div class="saturationWrap" style="width: 140px; height: 104px; position: relative; margin-right: 12px; margin-bottom: 10px; border-radius: 2px 2px 0px 0px; float: left; overflow: hidden;">
                         <div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; background: rgb(255, 0, 0);" :style="leftWrapStyle"
                             ref="leftWrap"
@@ -48,6 +98,8 @@
 </template>
 
 <script>
+import basicColor from '../mixins/basicColor'
+
 export default{
 	name: 'color-picker',
 	computed: {
@@ -61,7 +113,6 @@ export default{
 			}
 		},
 		leftWrapStyle() {
-			console.log(this.RGB)
 			return {
 				backgroundColor: `#${this.HSBToHex(this.rightHSB)}`
 			}
@@ -115,6 +166,7 @@ export default{
 			}
 		}
 	},
+	mixins: [basicColor],
 	data() {
 		return {
 			deltaX: 0,
@@ -132,6 +184,7 @@ export default{
 	},
 	mounted() {
 		this.initialize()
+		console.log(this.basic)
 	},
 	methods: {
 		rightdrag(x,y,top) {
@@ -386,7 +439,7 @@ export default{
 }
 
 .Twitter__body-3csza {
-    padding: 20px 20px 20px 20px
+    padding: 20px 12px 20px 20px
 }
 
 .Twitter__tab-vqD8I {
@@ -456,5 +509,35 @@ export default{
     border: 1px solid #ebedf0;
     border-radius: 2px;
     box-sizing: border-box
+}
+.Twitter__tab-vqD8I {
+    font-size: 13px;
+    color: #9a9ca1;
+    margin-bottom: 16px;
+}
+.Twitter__tab-vqD8I span {
+    cursor: pointer;
+}
+.Twitter__tab-vqD8I span.Twitter__active-3TNoY, .Twitter__tab-vqD8I span:hover {
+    color: #65676e;
+}
+.DividingLine__border-1DzBr {
+    border-left: 1px solid #e1e3e9;
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 10px;
+    display: inline-block;
+}
+.ui-clearfix {
+    zoom: 1;
+}
+.ui-clearfix:before {
+    content: "";
+    display: block;
+}
+.ui-clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
 }
 </style>
