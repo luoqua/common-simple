@@ -1,3 +1,4 @@
+// base.css
 body, div, span, header, footer, nav, section, aside, article, ul, dl, dt, dd, li, a, p, h1, h2, h3, h4,h5, h6, i, b, textarea, button, input, select, figure, figcaption, {
     padding: 0;
     margin: 0;
@@ -6,11 +7,27 @@ body, div, span, header, footer, nav, section, aside, article, ul, dl, dt, dd, l
     text-decoration: none;
     border: none;
     font-weight: normal;
-    font-family: "Microsoft Yahei";
+    font-family: PingFang SC,Helvetica Neue,Arial,sans-serif;
     box-sizing: border-box;
     -webkit-tap-highlight-color:transparent;
     -webkit-font-smoothing: antialiased;
     &:hover{
         outline: none;
     }
+}
+body,html{
+    background-color: #fff;
+    -webkit-font-smoothing: antialiased;
+    height: 100%;
+}
+#app{
+	height: 100%;
+}
+
+a {
+	color: #039;
+}
+
+a:hover {
+	color: #03f
 }

@@ -16,6 +16,9 @@ const versionRequirements = [
   }
 ]
 
+
+
+
 if (shell.which('npm')) {
   versionRequirements.push({
     name: 'npm',

@@ -10,8 +10,18 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')                    //�
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')      // webpack错误信息提示插件
 const portfinder = require('portfinder')                                    //端口查看
 
-const HOST = process.env.HOST                                               //主机地址
+const os=require("os");
+
+const networkInterfaces=os.networkInterfaces();
+
+const HOSTIP = networkInterfaces['本地连接'][1]['address'];
+
+const HOST = HOSTIP || process.env.HOST                                            //主机地址
 const PORT = process.env.PORT && Number(process.env.PORT)                   //端口号
+
+
+
+
 
 //合并webpack 配置文件
 const devWebpackConfig = merge(baseWebpackConfig, {
