@@ -15,7 +15,7 @@
 			<i class="iconfont icon-zujian icon-title"></i>
 	          <span :class="a">组件</span>
 	        </template>
-	        <router-link to="/map/demo" v-for="(item,index) in nav_list">
+	        <router-link to="/map/demo" v-for="(item,index) in nav_list" :key="index">
 				<el-menu-item index='1-1'>
 					<span slot="title">{{item.meta.name}}</span>
 				</el-menu-item>

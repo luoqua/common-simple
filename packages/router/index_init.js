@@ -4,7 +4,7 @@ import Loading from '@/components/loading/demo/demo'
 import Swipe from '@/components/swipe/demo/demo'
 import TreeSelect from '@/components/tree_select/demo/demo'
 import Index from '@/pages/layout/Layout'
-
+import Editpage from '@/pages/page_edit'
 
 /* export const DynamicRoutes = [
 	{
@@ -76,6 +76,10 @@ export const dynamicRoutes = [
 			name: '首页'
 		},
 		children: []
+	},
+	{
+		path: '/page',
+		component: Editpage
 	}
 
 ]

@@ -79,7 +79,7 @@ http.get = function(url, options) {
 				}
 			})
 			.catch(e => {
-				console.log(e)
+				reject(e)
 			})
 	})
 }
@@ -97,7 +97,7 @@ http.post = function(url,data, options) {
 				}
 			})
 			.catch(e => {
-				console.log(e)
+				reject(e)
 			})
 	})
 }

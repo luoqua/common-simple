@@ -46,7 +46,7 @@ router.beforeEach((to, from, next) => {
 			children.push(...routes)
 
 			router.addRoutes(dynamicRoutes)
-			
+
 			store.state.permissionList.push(...initialRoutes,...dynamicRoutes)
 
 			next({ path: to.path })
