@@ -147,7 +147,7 @@ module.exports = {
     "no-const-assign": 2,//禁止修改const声明的变量
     "no-constant-condition": 2,//禁止在条件中使用常量表达式 if(true) if(1)
     "no-continue": 0,//禁止使用continue
-    "no-control-regex": 2,//禁止在正则表达式中使用控制字符
+    'no-control-regex':0,   //禁止在正则中使用控制字符
     "no-debugger": 2,//禁止使用debugger
     "no-delete-var": 2,//不能对var声明的变量使用delete操作符
     "no-div-regex": 1,//不能使用看起来像除法的正则表达式/=foo/

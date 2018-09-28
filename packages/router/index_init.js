@@ -5,7 +5,7 @@ import Swipe from '@/components/swipe/demo/demo'
 import TreeSelect from '@/components/tree_select/demo/demo'
 import Index from '@/pages/layout/Layout'
 import Editpage from '@/pages/page_edit'
-
+import Input from '@/components/input'
 /* export const DynamicRoutes = [
 	{
 		path: '',
@@ -30,7 +30,7 @@ const DynamicRoutes = [
 		},
 		children: [
 			{
-				path: '/color_picker',
+				path: '/component/color_picker',
 				component: ColorPicker,
 				meta: {
 					requireAuth: true,
@@ -38,7 +38,7 @@ const DynamicRoutes = [
 				}
 			},
 			{
-				path: '/loading',
+				path: '/component/loading',
 				component: Loading,
 				meta: {
 					requireAuth: true,
@@ -46,7 +46,7 @@ const DynamicRoutes = [
 				}
 			},
 			{
-				path: '/swipe',
+				path: '/component/swipe',
 				component: Swipe,
 				meta: {
 					requireAuth: true,
@@ -54,14 +54,21 @@ const DynamicRoutes = [
 				}
 			},
 			{
-				path: '/tree_select',
+				path: '/component/tree_select',
 				component: TreeSelect,
 				meta: {
 					requireAuth: true,
 					name: '树形菜单'
 				}
+			},
+			{
+				path: '/component/input',
+				component: Input,
+				meta: {
+					requireAuth: true,
+					name: '输入框'
+				}
 			}
-
 		]
 	}
 ]
@@ -70,7 +77,6 @@ export const dynamicRoutes = [
 	{
 		path: '',
 		component: Index,
-		redirect: 'home',
 		meta: {
 			requiresAuth: true,
 			name: '首页'

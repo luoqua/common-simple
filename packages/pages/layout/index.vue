@@ -7,24 +7,24 @@
 	      @close="handleClose"
 	      background-color="#31b0ad"
 	      text-color="#fff"
-	      active-text-color="#ffd04b">
+	      active-text-color="#8ffaf8">
 	      <el-submenu index="1" >
-	      	
+
 	        <template slot="title">
-	          
+
 			<i class="iconfont icon-zujian icon-title"></i>
 	          <span :class="a">组件</span>
 	        </template>
-	        <router-link to="/map/demo" v-for="(item,index) in nav_list" :key="index">
-				<el-menu-item index='1-1'>
+	        <router-link :to="item.path" v-for="(item,index) in nav_list.children" :key="index">
+				<el-menu-item :index="item.name||item.path" :key="item.name">
 					<span slot="title">{{item.meta.name}}</span>
 				</el-menu-item>
 			</router-link>
-			
+
 	      </el-submenu>
-	     
+
 	    </el-menu>
-		
+
 	</section>
 </template>
 
@@ -38,11 +38,11 @@ export default{
 			activeIndex2: '1',
 			isCollapse: false,
 			a: ['ad','cd'],
-			nav_list: store.state.permissionList[1].children[0].children
+			nav_list: ''
 		}
 	},
-	mounted(){
-		console.log(this.nav_list)
+	created() {
+		this.nav_list = store.state.permissionList.find(route => route.path === '')
 	},
 	methods: {
 		handleSelect(key,keyPath) {
@@ -72,10 +72,13 @@ export default{
 	    position: fixed;
 	    top:60px;
 	    transition: width .28s;
-	    width: 199px!important;
+	    width: 180px!important;
 	    z-index: 1001;
 	    .el-menu-item{
 	    	background: #05817f!important;
+	    	&:hover{
+	    		background-color: #014a49!important;
+	    	}
 	    }
 	}
 	.el-menu-vertical-demo:not(.el-menu--collapse) {

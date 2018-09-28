@@ -1,3 +1,3 @@
-const baseUrl = 'http://192.168.1.108:8080'
+const baseUrl = 'http://192.168.1.194:8081'
 
 export default baseUrl

@@ -6,6 +6,14 @@
 					<div :class="b('cardtitle')">页面编辑</div>
 					<div :class="b('cardSubtitle')">编辑你的原生推广页</div>
 				</div>
+				<div :class="b('cardContent')">
+					<div :class="b('formGroup')">
+						
+					</div>
+					<div :class="b('formGroup')">
+						
+					</div>
+				</div>
 				
 			</div>
 		</div>
@@ -42,8 +50,8 @@ export default create({
 		height: 500px;
 		@include fj;
 		margin: 0 auto;
-
-		.simple-page-edit__cardWrapper{
+		$p: &;
+		&__cardWrapper{
 			position: relative;
 		    margin-bottom: 8px;
 		    padding: 16px 24px 42px;
@@ -51,25 +59,28 @@ export default create({
 		    background-color: #fff;
 		    box-shadow: 0 0 1px 0 rgba(0,0,0,.04), 0 1px 2px 0 rgba(37,39,46,.08), 0 1px 2px 0 rgba(37,39,46,.12), 0 0 0 1px #ebedf0;
 		    border-radius: 2px;
-		    .simple-page-edit__cardTitle{
+		    #{$p}__cardTitle{
 		    	margin-bottom: 24px;
-		    	.simple-page-edit__cardtitle{
+		    	#{$p}__cardtitle{
 					margin-bottom: 4px;
 				    font-size: 14px;
 				    line-height: 22px;
 		    	}
-		    	.simple-page-edit__cardSubtitle{
+		    	#{$p}__cardSubtitle{
 					    font-size: 13px;
 					    line-height: 20px;
 					    color: #8f9196;
 		    	}
+		    	#{$p}__formGroup{
+		    		margin-bottom: 28px;
+		    	}
 		    }
 		}
-   		.simple-page-edit__content{
+   		&__content{
 			flex: none;
 			@include wh(796px,100px);
    		}
-   		.simple-page-edit__preview{
+   		&__preview{
 			@include wh(392px,100px)
    		}
 	}

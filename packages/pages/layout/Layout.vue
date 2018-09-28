@@ -39,7 +39,13 @@ export default create({
 
 
 <style lang="scss" scoped>
-	
+	.simple-wrapper{
+		width: 100%;
+	    height: 100%;
+	    position: relative;
+	    overflow: hidden;
+	    z-index: 1;
+	}
 	.simple-header {
 		width: 100%;
 		-webkit-user-select: none;
@@ -47,6 +53,16 @@ export default create({
 		-ms-user-select: none;
 		user-select: none;
 		border-bottom: 1px solid #eaeefb;
+	}
+	.simple-main-container{
+		width: 100%;
+	    height: 100%;
+	    position: relative;
+	    padding: 0 0 0 50px;
+	    z-index: 1;
+	    background: #fff;
+	    overflow: hidden;
+	    padding-left: 180px;
 	}
 	
 </style>

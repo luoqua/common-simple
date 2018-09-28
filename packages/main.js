@@ -43,12 +43,12 @@ router.beforeEach((to, from, next) => {
 			let children = MainContainer.children
 			let initialRoutes = router.options.routes
 
-			children.push(...routes)
+			routes.forEach( route => children.push(...route.children))
 
 			router.addRoutes(dynamicRoutes)
-
+			
 			store.state.permissionList.push(...initialRoutes,...dynamicRoutes)
-
+			console.log(store.state.permissionList)
 			next({ path: to.path })
 
 		},function(err) {
