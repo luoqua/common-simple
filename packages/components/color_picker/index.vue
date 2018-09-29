@@ -1,107 +1,95 @@
 <template>
-	<div class="container">
-	 <div class="Twitter__card-1aw7c">
-        <div style="width: 0px; height: 0px; border-style: solid; border-width: 0px 5px 6px; border-color: transparent transparent rgb(201, 204, 209); position: absolute; top: -7px; left: 36px;"></div>
-        <div style="width: 0px; height: 0px; border-style: solid; border-width: 0px 5px 6px; border-color: transparent transparent rgb(255, 255, 255); position: absolute; top: -5px; left: 36px;"></div>
-        <div class="Twitter__body-3csza">
-            <div class="Twitter__tab-vqD8I"><span class="">基本色</span><span class="DividingLine__border-1DzBr"></span><span class="Twitter__active-3TNoY">更多颜色</span></div>
-            <div class="ui-clearfix" style="padding-bottom: 16px;">
+	<div :class="b()" v-if="isOpen" @click.stop="close()">
+	 <div :class="b('card')">
+        <div :class="b('body')">
+            <div  :class="b('tab')">
+            	<span :class="b('item', { active: isActive })"  @click="!isActive ? tabChange() : ''" >基本色</span>
+            	<span class="DividingLine__border-1DzBr">
+            	</span>
+            	<span :class="b('item', { active: !isActive })" @click="isActive ? tabChange() : ''" >更多颜色</span>
+            </div>
+            <div class="ui-clearfix">
 
-            <template>
-            	<div title="#FFFFFF" style="background: rgb(255, 255, 255); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: 1px solid rgb(228, 230, 235);"></div>
-			    <div title="#7A7A7A" style="background: rgb(122, 122, 122); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#FF8D87" style="background: rgb(255, 141, 135); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#FFD278" style="background: rgb(255, 210, 120); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#FFF39C" style="background: rgb(255, 243, 156); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#C3F2BD" style="background: rgb(195, 242, 189); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#9CF0E2" style="background: rgb(156, 240, 226); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#9EDDFF" style="background: rgb(158, 221, 255); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#FFC4F5" style="background: rgb(255, 196, 245); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#F5F5F5" style="background: rgb(245, 245, 245); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#5C5C5C" style="background: rgb(92, 92, 92); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#F8615B" style="background: rgb(248, 97, 91); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#FFB23D" style="background: rgb(255, 178, 61); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#FFEB4C" style="background: rgb(255, 235, 76); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#8DE080" style="background: rgb(141, 224, 128); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#5BDEC8" style="background: rgb(91, 222, 200); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#63BCFF" style="background: rgb(99, 188, 255); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#FA8CF5" style="background: rgb(250, 140, 245); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#D7D7D7" style="background: rgb(215, 215, 215); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#3D3D3D" style="background: rgb(61, 61, 61); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#DE2821" style="background: rgb(222, 40, 33); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#ED8D18" style="background: rgb(237, 141, 24); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#FAD902" style="background: rgb(250, 217, 2); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#45BA4E" style="background: rgb(69, 186, 78); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#0AC2A9" style="background: rgb(10, 194, 169); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#2F8EED" style="background: rgb(47, 142, 237); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#D259D4" style="background: rgb(210, 89, 212); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#B8B8B8" style="background: rgb(184, 184, 184); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#1E1E1E" style="background: rgb(30, 30, 30); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#99241E" style="background: rgb(153, 36, 30); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#B8571B" style="background: rgb(184, 87, 27); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#D9A61A" style="background: rgb(217, 166, 26); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#348C45" style="background: rgb(52, 140, 69); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#1D8A7F" style="background: rgb(29, 138, 127); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#1E64A6" style="background: rgb(30, 100, 166); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#8C418F" style="background: rgb(140, 65, 143); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#999999" style="background: rgb(153, 153, 153); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#000000" style="background: rgb(0, 0, 0); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#59231F" style="background: rgb(89, 35, 31); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#733E24" style="background: rgb(115, 62, 36); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#9E6B1F" style="background: rgb(158, 107, 31); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#20632E" style="background: rgb(32, 99, 46); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#2A5E5D" style="background: rgb(42, 94, 93); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#264869" style="background: rgb(38, 72, 105); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
-			    <div title="#593059" style="background: rgb(89, 48, 89); height: 16px; width: 16px; cursor: pointer; float: left; border-radius: 0px; box-sizing: border-box; margin: 0px 4px 4px 0px; border: none;"></div>
+            <template v-if="isActive">
+            	<div :title="item.color"
+            		  :class="b('basecolor')"
+            		  v-for="(item,index) in basic"
+            		  :style="{ backgroundColor: item.color,border: index == 0 || index == 9 ? '1px solid rgb(228, 230, 235)' : 'none' }">
 
+            		  </div>
             </template>
 
-                <div style="display:none">
-                    <div class="saturationWrap" style="width: 140px; height: 104px; position: relative; margin-right: 12px; margin-bottom: 10px; border-radius: 2px 2px 0px 0px; float: left; overflow: hidden;">
-                        <div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; background: rgb(255, 0, 0);" :style="leftWrapStyle"
-                            ref="leftWrap"
-                            @click="leftClick($event)"
-                            >
-                            <div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; background: linear-gradient(to right, rgb(255, 255, 255), rgba(255, 255, 255, 0));" >
-                                <div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; background: linear-gradient(to top, rgb(0, 0, 0), rgba(0, 0, 0, 0));"></div>
-                                <div style="position: absolute;  cursor: default;" ref="leftPointer" :style="leftPointerStyle">
-                                    <div class="Twitter__pickerChromePointerCircle-1cJlb"
-                                                v-drag:leftPointer="leftdrag"></div>
-                                </div>
+            <div v-if="!isActive">
+                <div class="saturationWrap" >
+                    <div :class="b('saturation')"
+                    	:style="leftWrapStyle"
+                        ref="leftWrap"
+                        @click="leftClick($event)"
+                        >
+                        <div :class="b('wrapBg')" >
+                            <div :class="b('wrapblock')"></div>
+                            <div :class="b('wrapsub')"
+                            	 ref="leftPointer"
+                            	 :style="leftPointerStyle">
+                                	<div :class="b('pointer')"
+                                            v-drag:leftPointer="leftdrag"></div>
                             </div>
                         </div>
                     </div>
-                    <div class="hueWrap" style="height: 104px; width: 12px; float: left; position: relative;">
-                        <div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; background: linear-gradient(to top, rgb(255, 0, 0) 0%, rgb(255, 255, 0) 17%, rgb(0, 255, 0) 33%, rgb(0, 255, 255) 50%, rgb(0, 0, 255) 67%, rgb(255, 0, 255) 83%, rgb(255, 0, 0) 100%);">
-                            <div style="margin: 0px 2px; position: relative; height: 100%;" ref="rightPicker"
-                                @click="clickPointer($event)">
-                                <div style="position: absolute; left: 0px; top: 100%;z-index:222" :style = "pointerStyle" ref="rightPointer">
-                                    <div class="Twitter__pickerChromePointer-vCGnu" style="position:relative;z-index:222"
-                                    	v-drag:rightPointer="rightdrag"
-                                    ></div>
-                                </div>
+                </div>
+                <div class="hueWrap" >
+                    <div :class="b('hueWrapbg')">
+                        <div :class="b('picker')"
+                        	ref="rightPicker"
+                            @click="clickPointer($event)">
+                            <div :class="b('pointer')"
+                             	 :style = "pointerStyle"
+                             	 ref="rightPointer">
+                                <div :class="b('pointerItem')"
+                                	v-drag:rightPointer="rightdrag"
+                                ></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div style="height: 16px; width: 16px; float: left; color: rgb(152, 161, 164); display: flex; align-items: center; justify-content: center; text-indent: -400em; margin-top: 3px; margin-right: 8px; border: 1px solid rgb(159, 100, 100);"
+            </div>
+            <div :class="b('currentColor')"
                 :style="currentColor"
                 >#</div>
-            <div style="position: relative;">
-                <input v-model="hexValue" placeholder="ff691f" style="width: 143px; font-size: 14px; color: rgb(154, 156, 161); border: 0px; outline: none; height: 24px; box-shadow: rgb(228, 230, 235) 0px 0px 0px 1px inset; border-radius: 0px 2px 2px 0px; float: left; padding-left: 8px;">
+            <div :class="b('currentHex')">
+                <input v-model="hexValue" :placeholder="placeholderColor">
             </div>
-            <div style="clear: both;"></div>
         </div>
     </div>
 </div>
 </template>
 
 <script>
+import create from '@/utils/create'
 import basicColor from '../mixins/basicColor'
 
-export default{
+export default create({
 	name: 'color-picker',
+	mixins: [basicColor],
+	data() {
+		return {
+			deltaX: 0,
+			deltaY: 0,
+			moveable: false,
+			rightHeight: 0,
+			leftHeight: 0,
+			leftWidth: 0,
+			rightTop: 1,
+			leftLeft: 0.5,
+			leftTop: 0.5,
+			clickable: true,
+			hexValue: '',
+			isActive: true,
+			placeholderColor: 'fff',
+			isOpen: true
+		}
+	},
 	computed: {
 		pointerStyle() {
 			if (this.rightHeight > 0) {
@@ -157,6 +145,10 @@ export default{
 			if (reg.test(this.hexValue)) {
 				let hsb = this.HexToHSB(this.hexValue)
 
+				if (hsb === null) {
+					return
+				}
+
 				this.rightTop = 1 - (hsb.h / 360)
 
 				this.leftLeft = hsb.s / 100
@@ -166,27 +158,20 @@ export default{
 			}
 		}
 	},
-	mixins: [basicColor],
-	data() {
-		return {
-			deltaX: 0,
-			deltaY: 0,
-			moveable: false,
-			rightHeight: 0,
-			leftHeight: 0,
-			leftWidth: 0,
-			rightTop: 1,
-			leftLeft: 0.5,
-			leftTop: 0.5,
-			clickable: true,
-			hexValue: ''
-		}
-	},
 	mounted() {
-		this.initialize()
-		console.log(this.basic)
 	},
 	methods: {
+		tabChange() {
+			this.isActive = !this.isActive
+			if (!this.isActive) {
+				this.$nextTick(() => {
+					this.initialize()
+				})
+			}
+		},
+		close() {
+			this.isOpen = !this.isOpen
+		},
 		rightdrag(x,y,top) {
 
 			const offsetY = y > 0 ? Math.max(0,Math.min(this.rightHeight * top,y)) :
@@ -230,8 +215,6 @@ export default{
 
 			this.leftLeft = leftLeft
 
-
-			console.log(this.HSB)
 		},
 		leftClick(ev) {
 
@@ -308,6 +291,9 @@ export default{
 			return {r: Math.round(rgb.r), g: Math.round(rgb.g), b: Math.round(rgb.b)}
 		},
 		RGBToHSB(rgb) {
+			if (!rgb) {
+				return rgb
+			}
 			var hsb = {
 				h: 0,
 				s: 0,
@@ -317,6 +303,9 @@ export default{
 			var max = Math.max(rgb.r, rgb.g, rgb.b)
 			var delta = max - min
 
+			if (!rgb) {
+				return
+			}
 			hsb.b = max
 			hsb.s = max !== 0 ? (255 * delta) / max : 0
 			if (hsb.s !== 0) {
@@ -339,6 +328,9 @@ export default{
 			return hsb
 		},
 		RGBToHex(rgb) {
+			if (!rgb) {
+				return rgb
+			}
 			var hex = [
 				rgb.r.toString(16),
 				rgb.g.toString(16),
@@ -356,20 +348,22 @@ export default{
 			return this.RGBToHex(this.HSBToRGB(hsb))
 		},
 		HexToRGB(hex) {
-			var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i
 
-		    hex = hex.replace(shorthandRegex, function(m, r, g, b) {
-		        return r + r + g + g + b + b
-		    })
-		    let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
 
-		    let rgb = result ? {
-		    	r: parseInt(result[1], 16),
-		    	g: parseInt(result[2], 16),
-		    	b: parseInt(result[3], 16)
-		    } : hex
+		    let rgx = /^#?([a-f\d])([a-f\d])([a-f\d])$/i
 
-		    return rgb
+			let hex_v = hex.replace(rgx, (m, r, g, b) => r + r + g + g + b + b)
+
+			let rgb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex_v)
+
+
+			let rgb_v = rgb !== null ? {
+				r: parseInt(rgb[1], 16),
+		    	g: parseInt(rgb[2], 16),
+		    	b: parseInt(rgb[3], 16)
+			} : rgb
+
+			return rgb_v
 
 		},
 		HexToHSB(hex) {
@@ -419,34 +413,211 @@ export default{
 			}
 		}
 	}
-}
+})
 </script>
 
 <style lang="scss" scoped>
-	.container{
-		width: 1200px;
-		margin: 0 auto;
-		text-align: center;
+	.simple-color-picker{
+		width: 100%;
+		height: 100%;
+		z-index: 99999;
+		position: relative;
+		background: #000;
+		$p:&;
+		&__card{
+			width: 216px;
+		    background: #fff;
+		    border-radius: 2px;
+		    position: relative;
+		    border: 1px solid #c9ccd1;
+		    box-shadow: 0 8px 10px 0 rgba(0,0,0,.03),0 1px 2px 0 rgba(0,0,0,.06),0 3px 6px 0 rgba(0,0,0,.04);
+		    margin:0 auto;
+		    margin-top: 50px;
+		    z-index: 999999;
+		    &:before{
+		    	content:"";
+			    width: 0px;
+			    height: 0px;
+			    border-style: solid;
+			    border-width: 0px 5px 6px;
+			    border-color: transparent transparent rgb(201, 204, 209);
+			    position: absolute;
+			    top: -7px;
+			    left: 36px;
+		    }
+		    &:after{
+		    	content:"";
+				width: 0px;
+			    height: 0px;
+			    border-style: solid;
+			    border-width: 0px 5px 6px;
+			    border-color: transparent transparent rgb(255, 255, 255);
+			    position: absolute;
+			    top: -5px;
+			    left: 36px;
+		    }
+		    #{$p}__body{
+		    	padding: 20px 12px 20px 20px;
+		    	zoom: 1;
+		    	&:after{
+					content: "";
+				    display: table;
+				    clear: both;
+				}
+				&:before{
+					content: "";
+					display: block;
+				}
+		    	#{$p}__tab{
+		    		font-size: 13px;
+				    color: #9a9ca1;
+				    margin-bottom: 16px;
+				    position: relative;
+				    span{
+				    	cursor: pointer;
+				    	&:hover{
+				    		color: #65676e;
+				    	}
+				    }
+				    #{$p}__item--active{
+				    	color: #65676e;
+				    }
+		    	}
+		    	.ui-clearfix{
+		    		zoom: 1;
+					padding-bottom: 16px;
+					&:after{
+						content: "";
+					    display: table;
+					    clear: both;
+					}
+					&:before{
+						content: "";
+    					display: block;
+					}
+					#{$p}__basecolor{
+						background: rgb(255, 255, 255);
+						height: 16px;
+						width: 16px;
+						cursor: pointer;
+						float: left;
+						border-radius: 0px;
+						box-sizing: border-box;
+						margin: 0px 4px 4px 0px;
+					}
+					.saturationWrap{
+						width: 140px;
+						height: 104px;
+						position: relative;
+						margin-right: 12px;
+						margin-bottom: 10px;
+						border-radius: 2px 2px 0px 0px;
+						float: left;
+						overflow: hidden;
+					}
+		    	}
+		    	#{$p}__saturation{
+					position: absolute;
+					top: 0px;
+					right: 0px;
+					bottom: 0px;
+					left: 0px;
+					background: rgb(255, 0, 0);
+				}
+				#{$p}__wrapBg{
+					position: absolute;
+					top: 0px;
+					right: 0px;
+					bottom: 0px;
+					left: 0px;
+					background: linear-gradient(to right, rgb(255, 255, 255), rgba(255, 255, 255, 0));
+					#{$p}__wrapblock{
+						position: absolute;
+						top: 0px;
+						right: 0px;
+						bottom: 0px;
+						left: 0px;
+						background: linear-gradient(to top, rgb(0, 0, 0), rgba(0, 0, 0, 0));
+					}
+					#{$p}__wrapsub{
+						position: absolute;
+						cursor: default;
+						#{$p}__pointer{
+							width: 8px;
+						    height: 8px;
+						    border-radius: 4px;
+						    box-shadow: inset 0 0 0 1px #fff;
+						    transform: translate(-4px,-4px)
+						}
+					}
+				}
+				.hueWrap{
+					height: 104px;
+					width: 12px;
+					float: left;
+					position: relative;
+					#{$p}__hueWrapbg{
+						position: absolute;
+						top: 0px;
+						right: 0px;
+						bottom: 0px;
+						left: 0px;
+						background: linear-gradient(to top, rgb(255, 0, 0) 0%, rgb(255, 255, 0) 17%, rgb(0, 255, 0) 33%, rgb(0, 255, 255) 50%, rgb(0, 0, 255) 67%, rgb(255, 0, 255) 83%, rgb(255, 0, 0) 100%);
+						#{$p}__picker{
+							margin: 0px 2px;
+							position: relative;
+							height: 100%;
+							#{$p}__pointer{
+								position: absolute;
+								left: 0px;
+								top: 100%;
+								z-index:222;
+								#{$p}__pointerItem{
+									width: 20px;
+								    height: 8px;
+								    border: 1px solid #e4e6eb;
+								    transform: translate(-6px,-1px);
+								    background-color: #fff;
+								    box-shadow: 0 0 2px 0 rgba(0,0,0,.3);
+								    border-radius: 1px;
+								    position:relative;z-index:222
+								}
+							}
+						}
+					}
+				}
+				#{$p}__currentColor{
+					height: 16px;
+					width: 16px;
+					float: left;
+					color: rgb(152, 161, 164);
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					text-indent: -400em;
+					margin-top: 3px;
+					margin-right: 8px;
+					border: 1px solid rgb(159, 100, 100);
+				}
+				#{$p}__currentHex{
+					position: relative;
+					input{
+						width: 143px;
+						font-size: 14px;
+						color: rgb(154, 156, 161);
+						border: 0px;
+						outline: none;
+						height: 24px;
+						box-shadow: rgb(228, 230, 235) 0px 0px 0px 1px inset;
+						border-radius: 0px 2px 2px 0px;
+						float: left;
+						padding-left: 8px;
+					}
+				}
+		    }
+		}
 	}
-	.Twitter__card-1aw7c {
-    width: 216px;
-    background: #fff;
-    border-radius: 2px;
-    position: relative;
-    border: 1px solid #c9ccd1;
-    box-shadow: 0 8px 10px 0 rgba(0,0,0,.03),0 1px 2px 0 rgba(0,0,0,.06),0 3px 6px 0 rgba(0,0,0,.04);
-    margin:0 auto;
-}
 
-.Twitter__body-3csza {
-    padding: 20px 12px 20px 20px
-}
-
-.Twitter__tab-vqD8I {
-    font-size: 13px;
-    color: #9a9ca1;
-    margin-bottom: 16px
-}
 
 .Twitter__tab-vqD8I span {
     cursor: pointer
@@ -466,13 +637,6 @@ export default{
     border-radius: 1px
 }
 
-.Twitter__pickerChromePointerCircle-1cJlb {
-    width: 8px;
-    height: 8px;
-    border-radius: 4px;
-    box-shadow: inset 0 0 0 1px #fff;
-    transform: translate(-4px,-4px)
-}
 
 .ColorPicker__cover-3sLc5 {
     position: fixed;
@@ -528,16 +692,5 @@ export default{
     height: 10px;
     display: inline-block;
 }
-.ui-clearfix {
-    zoom: 1;
-}
-.ui-clearfix:before {
-    content: "";
-    display: block;
-}
-.ui-clearfix:after {
-    content: "";
-    display: table;
-    clear: both;
-}
+
 </style>

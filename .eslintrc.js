@@ -301,7 +301,7 @@ module.exports = {
     "use-isnan": 2,//禁止比较时使用NaN，只能用isNaN()
     "valid-jsdoc": 0,//jsdoc规则
     "valid-typeof": 2,//必须使用合法的typeof的值
-    "vars-on-top": 2,//var必须放在作用域顶部
+    "vars-on-top": 0,//var必须放在作用域顶部
     "wrap-iife": [2, "inside"],//立即执行函数表达式的小括号风格
     "wrap-regex": 0,//正则表达式字面量用小括号包起来
     "yoda": [2, "never"],//禁止尤达条件
