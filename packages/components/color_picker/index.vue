@@ -1,5 +1,5 @@
 <template>
-	<div :class="b()" v-if="isOpen" @click.stop="close()">
+	<div :class="b()" v-if="isOpen" @click.stop="close($event)" ref="color_picker_wrapper">
 	 <div :class="b('card')">
         <div :class="b('body')">
             <div  :class="b('tab')">
@@ -14,7 +14,8 @@
             	<div :title="item.color"
             		  :class="b('basecolor')"
             		  v-for="(item,index) in basic"
-            		  :style="{ backgroundColor: item.color,border: index == 0 || index == 9 ? '1px solid rgb(228, 230, 235)' : 'none' }">
+            		  :style="{ backgroundColor: item.color,border: index == 0 || index == 9 ? '1px solid rgb(228, 230, 235)' : 'none' }"
+            		  @click="baseColorhandle(item.color)">
 
             		  </div>
             </template>
@@ -86,7 +87,7 @@ export default create({
 			clickable: true,
 			hexValue: '',
 			isActive: true,
-			placeholderColor: 'fff',
+			placeholderColor: 'ff691f',
 			isOpen: true
 		}
 	},
@@ -169,8 +170,19 @@ export default create({
 				})
 			}
 		},
-		close() {
-			this.isOpen = !this.isOpen
+		baseColorhandle(color) {
+			let hsb = this.HexToHSB(color)
+
+			this.rightTop = 1 - (hsb.h / 360)
+
+			this.leftLeft = hsb.s / 100
+
+			this.leftTop = 1 - (hsb.b / 100)
+		},
+		close(ev) {
+			if (ev.target === this.$refs.color_picker_wrapper) {
+				this.isOpen = !this.isOpen
+			}
 		},
 		rightdrag(x,y,top) {
 
@@ -422,7 +434,6 @@ export default create({
 		height: 100%;
 		z-index: 99999;
 		position: relative;
-		background: #000;
 		$p:&;
 		&__card{
 			width: 216px;

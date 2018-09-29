@@ -14,8 +14,7 @@ const os=require("os");
 
 const networkInterfaces=os.networkInterfaces();
 
-
-const HOSTIP = networkInterfaces['本地连接'][1]['address'];
+const HOSTIP = networkInterfaces['无线网络连接'][1]['address'];
 
 const HOST = HOSTIP || process.env.HOST                                            //主机地址
 const PORT = process.env.PORT && Number(process.env.PORT)                   //端口号
