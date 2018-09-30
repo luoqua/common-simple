@@ -1,11 +1,11 @@
 /* import BaiduMap from '@/components/baidu_map/demo/demo' */
-import ColorPicker from '@/components/color_picker/index'
+import ColorPicker from '@/components/color_picker/demo/demo'
 import Loading from '@/components/loading/demo/demo'
 import Swipe from '@/components/swipe/demo/demo'
 import TreeSelect from '@/components/tree_select/demo/demo'
 import Index from '@/pages/layout/Layout'
 import Editpage from '@/pages/page_edit'
-import Input from '@/components/input'
+import Input from '@/components/input/demo/demo'
 /* export const DynamicRoutes = [
 	{
 		path: '',

@@ -1,68 +1,69 @@
 <template>
-	<div :class="b()" v-if="isOpen" @click.stop="close($event)" ref="color_picker_wrapper">
-	 <div :class="b('card')">
-        <div :class="b('body')">
-            <div  :class="b('tab')">
-            	<span :class="b('item', { active: isActive })"  @click="!isActive ? tabChange() : ''" >基本色</span>
-            	<span class="DividingLine__border-1DzBr">
-            	</span>
-            	<span :class="b('item', { active: !isActive })" @click="isActive ? tabChange() : ''" >更多颜色</span>
-            </div>
-            <div class="ui-clearfix">
+	<div :class="b()" v-if="isOpen">
+	<div :class="b('color_cover')"  @click.stop="close($event)" ref="color_cover"></div>
+		<div :class="b('card')">
+		    <div :class="b('body')">
+		        <div  :class="b('tab')">
+		        	<span :class="b('item', { active: isActive })"  @click="!isActive ? tabChange() : ''" >基本色</span>
+		        	<span class="DividingLine__border-1DzBr">
+		        	</span>
+		        	<span :class="b('item', { active: !isActive })" @click="isActive ? tabChange() : ''" >更多颜色</span>
+		        </div>
+		        <div class="ui-clearfix">
 
-            <template v-if="isActive">
-            	<div :title="item.color"
-            		  :class="b('basecolor')"
-            		  v-for="(item,index) in basic"
-            		  :style="{ backgroundColor: item.color,border: index == 0 || index == 9 ? '1px solid rgb(228, 230, 235)' : 'none' }"
-            		  @click="baseColorhandle(item.color)">
+		        <template v-if="isActive">
+		        	<div :title="item.color"
+		        		  :class="b('basecolor')"
+		        		  v-for="(item,index) in basic"
+		        		  :style="{ backgroundColor: item.color,border: index == 0 || index == 9 ? '1px solid rgb(228, 230, 235)' : 'none' }"
+		        		  @click="baseColorhandle(item.color)">
 
-            		  </div>
-            </template>
+		        		  </div>
+		        </template>
 
-            <div v-if="!isActive">
-                <div class="saturationWrap" >
-                    <div :class="b('saturation')"
-                    	:style="leftWrapStyle"
-                        ref="leftWrap"
-                        @click="leftClick($event)"
-                        >
-                        <div :class="b('wrapBg')" >
-                            <div :class="b('wrapblock')"></div>
-                            <div :class="b('wrapsub')"
-                            	 ref="leftPointer"
-                            	 :style="leftPointerStyle">
-                                	<div :class="b('pointer')"
-                                            v-drag:leftPointer="leftdrag"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="hueWrap" >
-                    <div :class="b('hueWrapbg')">
-                        <div :class="b('picker')"
-                        	ref="rightPicker"
-                            @click="clickPointer($event)">
-                            <div :class="b('pointer')"
-                             	 :style = "pointerStyle"
-                             	 ref="rightPointer">
-                                <div :class="b('pointerItem')"
-                                	v-drag:rightPointer="rightdrag"
-                                ></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div>
-            <div :class="b('currentColor')"
-                :style="currentColor"
-                >#</div>
-            <div :class="b('currentHex')">
-                <input v-model="hexValue" :placeholder="placeholderColor">
-            </div>
-        </div>
-    </div>
+		        <div v-if="!isActive">
+		            <div class="saturationWrap" >
+		                <div :class="b('saturation')"
+		                	:style="leftWrapStyle"
+		                    ref="leftWrap"
+		                    @click="leftClick($event)"
+		                    >
+		                    <div :class="b('wrapBg')" >
+		                        <div :class="b('wrapblock')"></div>
+		                        <div :class="b('wrapsub')"
+		                        	 ref="leftPointer"
+		                        	 :style="leftPointerStyle">
+		                            	<div :class="b('pointer')"
+		                                        v-drag:leftPointer="leftdrag"></div>
+		                        </div>
+		                    </div>
+		                </div>
+		            </div>
+		            <div class="hueWrap" >
+		                <div :class="b('hueWrapbg')">
+		                    <div :class="b('picker')"
+		                    	ref="rightPicker"
+		                        @click="clickPointer($event)">
+		                        <div :class="b('pointer')"
+		                         	 :style = "pointerStyle"
+		                         	 ref="rightPointer">
+		                            <div :class="b('pointerItem')"
+		                            	v-drag:rightPointer="rightdrag"
+		                            ></div>
+		                        </div>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+		        </div>
+		        <div :class="b('currentColor')"
+		            :style="currentColor"
+		            >#</div>
+		        <div :class="b('currentHex')">
+		            <input v-model="hexValue" :placeholder="placeholderColor">
+		        </div>
+		    </div>
+		</div>
 </div>
 </template>
 
@@ -73,6 +74,12 @@ import basicColor from '../mixins/basicColor'
 export default create({
 	name: 'color-picker',
 	mixins: [basicColor],
+	props: {
+		isOpen: {
+			type: Boolean,
+			default: false
+		}
+	},
 	data() {
 		return {
 			deltaX: 0,
@@ -82,13 +89,12 @@ export default create({
 			leftHeight: 0,
 			leftWidth: 0,
 			rightTop: 1,
-			leftLeft: 0.5,
-			leftTop: 0.5,
+			leftLeft: 0,
+			leftTop: 0,
 			clickable: true,
 			hexValue: '',
 			isActive: true,
-			placeholderColor: 'ff691f',
-			isOpen: true
+			placeholderColor: 'e4e6eb'
 		}
 	},
 	computed: {
@@ -133,9 +139,11 @@ export default create({
 			}
 		},
 		currentColor() {
+			this.$emit('GetCurrentColor',`#${this.HSBToHex(this.HSB)}`)
+
 			return {
 				backgroundColor: `#${this.HSBToHex(this.HSB)}`,
-				border: `1px solid #${this.HSBToHex(this.HSB)}`
+				border: this.HSBToHex(this.HSB) !== 'ffffff' ? `1px solid #${this.HSBToHex(this.HSB)}` : '1px solid #e4e6eb'
 			}
 		}
 	},
@@ -180,8 +188,8 @@ export default create({
 			this.leftTop = 1 - (hsb.b / 100)
 		},
 		close(ev) {
-			if (ev.target === this.$refs.color_picker_wrapper) {
-				this.isOpen = !this.isOpen
+			if (ev.target === this.$refs.color_cover) {
+				this.$emit('togglePicker')
 			}
 		},
 		rightdrag(x,y,top) {
@@ -430,21 +438,28 @@ export default create({
 
 <style lang="scss" scoped>
 	.simple-color-picker{
-		width: 100%;
-		height: 100%;
-		z-index: 99999;
-		position: relative;
+		position: absolute;
+	    z-index: 2;
+	    left: -18px;
+	    top: 43px;
 		$p:&;
+		&__color_cover{
+			position: fixed;
+		    top: 0;
+		    right: 0;
+		    bottom: 0;
+		    left: 0;
+		    z-index: 9999;
+		}
 		&__card{
 			width: 216px;
 		    background: #fff;
 		    border-radius: 2px;
-		    position: relative;
 		    border: 1px solid #c9ccd1;
 		    box-shadow: 0 8px 10px 0 rgba(0,0,0,.03),0 1px 2px 0 rgba(0,0,0,.06),0 3px 6px 0 rgba(0,0,0,.04);
 		    margin:0 auto;
-		    margin-top: 50px;
-		    z-index: 999999;
+		    z-index: 99999;
+		    position: relative;
 		    &:before{
 		    	content:"";
 			    width: 0px;
@@ -453,7 +468,7 @@ export default create({
 			    border-width: 0px 5px 6px;
 			    border-color: transparent transparent rgb(201, 204, 209);
 			    position: absolute;
-			    top: -7px;
+			    top: -6px;
 			    left: 36px;
 		    }
 		    &:after{
@@ -464,7 +479,7 @@ export default create({
 			    border-width: 0px 5px 6px;
 			    border-color: transparent transparent rgb(255, 255, 255);
 			    position: absolute;
-			    top: -5px;
+			    top: -4px;
 			    left: 36px;
 		    }
 		    #{$p}__body{

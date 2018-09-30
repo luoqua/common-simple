@@ -63,6 +63,7 @@ export default create({
 	    background: #fff;
 	    overflow: hidden;
 	    padding-left: 180px;
+	    padding-top: 50px;
 	}
 	
 </style>
