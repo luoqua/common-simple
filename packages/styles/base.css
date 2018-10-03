@@ -19,15 +19,17 @@ body,html{
     background-color: #fff;
     -webkit-font-smoothing: antialiased;
     height: 100%;
+    line-height: 1.4;
 }
 #app{
 	height: 100%;
 }
 
-a {
-	color: #039;
+[class^="simple-"] > a{
+	color: #459ae9;
+    text-decoration: none;
 }
 
-a:hover {
-	color: #03f
+[class^="simple-"] > a:hover {
+	text-decoration: underline;
 }

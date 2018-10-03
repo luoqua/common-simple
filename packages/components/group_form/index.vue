@@ -2,9 +2,7 @@
 	<div :class="b()">
 		<label :class="b('label')">{{labelName}}</label>
 		<div :class="b('modform')">
-			<div :class="b('modflex')">
-				<slot></slot>
-			</div>
+			<slot></slot>
 		</div>
 	</div>
 </template>
@@ -32,7 +30,7 @@ export default create({
 </script>
 
 
-<style type="text/css" lang="scss" scoped>
+<style type="text/css" lang="scss"    >
 	.simple-groupform{
 		margin-bottom: 28px;
 		$p:&;
@@ -44,17 +42,15 @@ export default create({
 		    font-size: 14px;
 			margin-left: 16px;
 			margin-top: 0.3em;
+			margin-top: 0px;
+    		width: 4em;
 		}
 		&__modform{
 			display: table-cell;
 		    vertical-align: top;
 		    float: none;
 		    width: auto;
-		    #{$p}__modflex{
-				display: inline-flex;
-				align-items: center;
-				width: initial;
-		    }
+		    
 		}
 	}
 </style>

@@ -145,7 +145,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss"   >
 @import '../../styles/common';
 	.nav-section{
 	@include wh(100%,auto);

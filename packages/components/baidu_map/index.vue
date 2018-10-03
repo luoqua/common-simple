@@ -95,7 +95,7 @@ export default{
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss"   >
 @import '../../styles/common';
 .map{
 	height: px2rem(1334);

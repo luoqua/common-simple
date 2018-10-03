@@ -68,7 +68,7 @@ export default create({
 </script>
 
 
-<style type="text/css" lang="scss" scoped>
+<style type="text/css" lang="scss"    >
 	.simple-input{
 		font-size: 14px;
 		$p:&;

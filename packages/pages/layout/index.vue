@@ -61,7 +61,7 @@ export default{
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss"   >
 	.side-bar{
 	    -webkit-transition: width .28s;
 	    bottom: 0;

@@ -33,7 +33,7 @@ export default{
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss"   >
 	.demo-swipe--vertical{
 		height: 200px;
 		overflow: hidden;

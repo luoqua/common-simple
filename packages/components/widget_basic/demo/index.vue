@@ -1,23 +1,26 @@
 <template>
-	<left></left>
+	<widget-basic>
+		<Radio />
+	</widget-basic>
 </template>
 
 
 
 <script type="text/javascript">
-
 import create from '@/utils/create'
-import left from '../index'
+import Radio from '@/components/radio/demo'
+import widgetBasic from '../index.vue'
 
 export default create({
-	name: 'Sidebar',
+	name: 'widget-basic-demo',
 	props: [],
 	data() {
 		return {
 		}
 	},
 	components: {
-		left
+		widgetBasic,
+		Radio
 	},
 	methods: {
 
@@ -26,6 +29,6 @@ export default create({
 </script>
 
 
-<style type="text/css" lang="scss"   >
+<style type="text/css" lang="scss"    >
 
 </style>

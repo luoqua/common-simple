@@ -38,7 +38,7 @@ export default create({
 </script>
 
 
-<style lang="scss" scoped>
+<style lang="scss"   >
 	.simple-wrapper{
 		width: 100%;
 	    height: 100%;

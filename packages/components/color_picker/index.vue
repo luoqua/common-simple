@@ -436,7 +436,7 @@ export default create({
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss"    >
 	.simple-color-picker{
 		position: absolute;
 	    z-index: 2;

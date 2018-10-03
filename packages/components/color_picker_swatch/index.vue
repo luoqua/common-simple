@@ -24,7 +24,7 @@ export default create({
 	},
 	computed: {
 		bgColor() {
-		
+
 			return {
 				backgroundColor: this.currentColor,
 				borderColor: this.currentColor !== '#ffffff' ? this.currentColor : '#e4e6eb'
@@ -40,7 +40,7 @@ export default create({
 </script>
 
 
-<style type="text/css" lang="scss" scoped>
+<style type="text/css" lang="scss"    >
 	.simple-color_picker_swatch{
 		padding: 5px;
 	    background: #fafbfc;
@@ -49,6 +49,10 @@ export default create({
 	    display: inline-block;
 	    cursor: pointer;
 	    position: relative;
+	    &:hover{
+	    	background: #f4f5f7;
+    		border-color: #d3d4d6;
+	    }
 	    &__color{
 	    	width: 36px;
 		    height: 20px;

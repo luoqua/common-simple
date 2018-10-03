@@ -44,7 +44,7 @@ export default create({
 </script>
 
 
-<style type="text/css" lang="scss" scoped>
+<style type="text/css" lang="scss"   >
 	.simple-page-edit{
 		@include wh(1200px,auto);
 		height: 500px;

@@ -5,7 +5,8 @@ import Swipe from '@/components/swipe/demo/demo'
 import TreeSelect from '@/components/tree_select/demo/demo'
 import Index from '@/pages/layout/Layout'
 import Editpage from '@/pages/page_edit'
-import Input from '@/components/input/demo/demo'
+import Input from '@/components/input/demo'
+import WidgetBasic from '@/components/widget_basic/demo'
 /* export const DynamicRoutes = [
 	{
 		path: '',
@@ -67,6 +68,14 @@ const DynamicRoutes = [
 				meta: {
 					requireAuth: true,
 					name: '输入框'
+				}
+			},
+			{
+				path: '/component/widget_basic',
+				component: WidgetBasic,
+				meta: {
+					requireAuth: true,
+					name: '基础组件'
 				}
 			}
 		]

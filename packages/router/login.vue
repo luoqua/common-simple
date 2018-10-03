@@ -36,6 +36,6 @@ export default create({
 </script>
 
 
-<style type="text/css" lang="scss" scoped>
+<style type="text/css" lang="scss"   >
 
 </style>
