@@ -1,6 +1,7 @@
 <template>
 	<widget-basic>
 		<Radio />
+		<Upload />
 	</widget-basic>
 </template>
 
@@ -9,6 +10,7 @@
 <script type="text/javascript">
 import create from '@/utils/create'
 import Radio from '@/components/radio/demo'
+import Upload from '@/components/upload/demo'
 import widgetBasic from '../index.vue'
 
 export default create({
@@ -20,7 +22,8 @@ export default create({
 	},
 	components: {
 		widgetBasic,
-		Radio
+		Radio,
+		Upload
 	},
 	methods: {
 
