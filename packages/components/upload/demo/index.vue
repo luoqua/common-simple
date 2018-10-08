@@ -2,7 +2,9 @@
 	<div>
 		<group-form
 			label-name="外层图片">
-			<Upload :upload-parm="parm"/>
+			<Upload 
+				:upload-parm="parm"
+				:beforeUpload="beforeUpload"/>
 		</group-form>
 	</div>
 </template>
@@ -29,12 +31,20 @@ export default create({
 		Upload
 	},
 	created() {
+
 		getSignature().then((data) => {
 			this.parm = data
+			this.parm['key'] = ''
 		})
 	},
-	methods: {
+	methods:{
+		beforeUpload() {
 
+			this.parm.key = 'upload/1323123123'
+
+			console.log(this.parm)
+			return true
+		}
 	}
 })
 </script>

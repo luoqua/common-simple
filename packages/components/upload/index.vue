@@ -39,6 +39,10 @@ export default create({
 		uploadParm: {
 			type: Object,
 			default: {}
+		},
+		beforeUpload: {
+			type: Function,
+			default: () => true
 		}
 	},
 	data() {
@@ -56,7 +60,7 @@ export default create({
 			let uploadParm = this.uploadParm || {}
 			let uploadStart
 
-			uploadParm = this.initFormData(uploadParm)
+			
 
 			files = files.length === 1 ? files[0] : [].slice.call(files,0)
 
@@ -64,6 +68,8 @@ export default create({
 				return
 			}
 
+			uploadParm = this.initFormData(uploadParm)
+			console.log(uploadParm)
 			if (Array.isArray(files)) {
 
 				files.forEach((item) => {
@@ -78,7 +84,6 @@ export default create({
 				})
 
 			} else {
-				uploadParm.append('key',files)
 				uploadParm.append('file',files)
 
 				uploadStart = upload(uploadParm)
@@ -96,9 +101,6 @@ export default create({
 		},
 		afterUpload() {
 
-		},
-		beforeUpload() {
-			return true
 		},
 		initFormData(data) {
 			let formData = new FormData()
