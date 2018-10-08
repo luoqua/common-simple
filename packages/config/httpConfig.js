@@ -1,7 +1,7 @@
 import axios from 'axios'
 import UserToken from '@/store/store.js'
 import { Message } from 'element-ui'
-import baseURL from './baseUrl'
+import {baseURL} from './baseUrl'
 
 const http = {}
 
@@ -102,4 +102,17 @@ http.post = function(url,data, options) {
 	})
 }
 
+// 封装第三方请求
+http.trdapi = function(url,data,options) {
+	return new Promise((resolve,reject) => {
+		axios.
+			post(url,data,options)
+			.then(response => {
+				resolve(response)
+			})
+			.catch(e => {
+				reject(e)
+			})
+	})
+}
 export default http

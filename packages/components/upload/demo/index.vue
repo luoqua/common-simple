@@ -2,7 +2,7 @@
 	<div>
 		<group-form
 			label-name="外层图片">
-			<Upload />
+			<Upload :upload-parm="parm"/>
 		</group-form>
 	</div>
 </template>
@@ -12,6 +12,7 @@
 <script type="text/javascript">
 import create from '@/utils/create'
 import groupForm from '@/components/group_form'
+import {getSignature} from '@/api/permission'
 import Upload from '../index'
 
 export default create({
@@ -19,12 +20,18 @@ export default create({
 	props: [],
 	data() {
 		return {
-			radio_value: 1
+			radio_value: 1,
+			parm: {}
 		}
 	},
 	components: {
 		groupForm,
 		Upload
+	},
+	created() {
+		getSignature().then((data) => {
+			this.parm = data
+		})
 	},
 	methods: {
 
