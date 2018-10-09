@@ -5,6 +5,7 @@
 		  	"policy": "eyJleHBpcmF0aW9uIjoiMjAxOC0xMS0wN1QyMDoxMDoxNloiLCJjb25kaXRpb25zIjpbWyJjb250ZW50LWxlbmd0aC1yYW5nZSIsMCwxMDQ4NTc2MDAwXSxbInN0YXJ0cy13aXRoIiwiJGtleSIsInVwbG9hZC8iXV19",
 		    "OSSAccessKeyId": "LTAIxUum85IF6PwL",
 		    "Signature": "OruaW7n2lkd5LLALfv52mOqG+v4=",
-		    "expire": "2018-11-07T20:10:16Z"
+		    "expire": "2018-11-07T20:10:16Z",
+		    "dir":"upload"
 		  }
 }

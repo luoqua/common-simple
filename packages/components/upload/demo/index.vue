@@ -15,6 +15,7 @@
 import create from '@/utils/create'
 import groupForm from '@/components/group_form'
 import {getSignature} from '@/api/permission'
+import {getRandom} from '@/utils/common'
 import Upload from '../index'
 
 export default create({
@@ -23,7 +24,12 @@ export default create({
 	data() {
 		return {
 			radio_value: 1,
-			parm: {}
+			parm: {
+				key: '',
+				success_action_status: 200,
+				maxSize: 300,			// 默认单位是kb
+				rect: '800*800 / 640*800 / 800*640 / 800*450'
+			}
 		}
 	},
 	components: {
@@ -31,19 +37,22 @@ export default create({
 		Upload
 	},
 	created() {
-
 		getSignature().then((data) => {
-			this.parm = data
-			this.parm['key'] = ''
+			this.parm = Object.assign(this.parm,data)
 		})
 	},
-	methods:{
-		beforeUpload() {
+	methods: {
+		beforeUpload(file) {
+			const isltsize = Math.round((file.size / 1024) * 100) / 100 > this.maxSize
 
-			this.parm.key = 'upload/1323123123'
+			if (!isltsize) {
+				return
+			}
+			this.parm.key = `${this.parm.dir}/${getRandom()}.${file.type.split('/').pop()}`
+			return isltsize
+		},
+		random_string() {
 
-			console.log(this.parm)
-			return true
 		}
 	}
 })

@@ -32,6 +32,7 @@
 import create from '@/utils/create'
 import Button from '@/components/button'
 import {upload} from '@/api/permission'
+import {readImgData} from '@/utils/common'
 
 export default create({
 	name: 'upload',
@@ -60,16 +61,21 @@ export default create({
 			let uploadParm = this.uploadParm || {}
 			let uploadStart
 
-			
-
 			files = files.length === 1 ? files[0] : [].slice.call(files,0)
 
-			if (!files || !this.beforeUpload(files)) {
+			if (!files || (this.beforeRead && !this.beforeRead(files))) {
 				return
 			}
 
+			if (this.accept && this.accept.indexOf(files.type) === -1) {
+				console.log('不支持当前上传文件类型')
+
+			}
+			readImgData(files).then(data => {
+				this.handleRectSize(data)
+			})
 			uploadParm = this.initFormData(uploadParm)
-			console.log(uploadParm)
+
 			if (Array.isArray(files)) {
 
 				files.forEach((item) => {
@@ -99,8 +105,15 @@ export default create({
 		uploadProgress() {
 
 		},
-		afterUpload() {
+		handleRectSize(data) {
+			if (data) {
+				let height = data.height
+				let width = data.width
 
+				this.rectSize.split('/').some((item) => {
+					return `${width} * ${height}` === item.trim()
+				})
+			}
 		},
 		initFormData(data) {
 			let formData = new FormData()
