@@ -58,52 +58,52 @@ export default create({
 	methods: {
 		upload(e) {
 			let files = e.target.files
-			let uploadParm = this.uploadParm || {}
-			let uploadStart
 
 			files = files.length === 1 ? files[0] : [].slice.call(files,0)
 
-			if (!files || (this.beforeRead && !this.beforeRead(files))) {
-				return
-			}
-
-			if (this.accept && this.accept.indexOf(files.type) === -1) {
-				console.log('不支持当前上传文件类型')
-
-			}
-			readImgData(files).then(data => {
-				this.handleRectSize(data)
-			})
-			uploadParm = this.initFormData(uploadParm)
-
 			if (Array.isArray(files)) {
 
-				files.forEach((item) => {
-					uploadParm.append('file',item)
-					uploadStart = upload(uploadParm)
-
-					this.uploadProgress()
-
-					uploadStart.then((data) => {
-						this.afterUpload(data)
+				Promise.all(files.map(readImgData)).then((arr) => {
+					Promise.all(arr.map(readFile)).then((result) => {
+						console.log(result)
 					})
 				})
 
 			} else {
-				uploadParm.append('file',files)
-
-				uploadStart = upload(uploadParm)
-
-				this.uploadProgress()
-
-				uploadStart.then((data) => {
-					this.afterUpload(data)
+				readImgData(files).then(data => {
+					this.readFile(data,files)
 				})
 			}
 
 		},
 		uploadProgress() {
 
+		},
+		readFile(data,files) {
+			let uploadParm = this.uploadParm || {}
+			let uploadStart
+
+			if (!this.handleRectSize(data)) {
+				return
+			}
+			if (!files || (this.beforeRead && !this.beforeRead(files))) {
+				return
+			}
+			if (this.accept && this.accept.indexOf(files.type) === -1) {
+				console.log('不支持当前上传文件类型')
+
+			}
+			uploadParm = this.initFormData(uploadParm)
+
+			uploadParm.append('file',files)
+
+			uploadStart = upload(uploadParm)
+
+			this.uploadProgress()
+
+			uploadStart.then((result) => {
+				this.afterUpload(result)
+			})
 		},
 		handleRectSize(data) {
 			if (data && this.rectSize) {
