@@ -32,7 +32,7 @@
 import create from '@/utils/create'
 import Button from '@/components/button'
 import {upload} from '@/api/permission'
-import {readImgData} from '@/utils/common'
+import {readImgData,trim} from '@/utils/common'
 
 export default create({
 	name: 'upload',
@@ -106,14 +106,19 @@ export default create({
 
 		},
 		handleRectSize(data) {
-			if (data) {
+			if (data && this.rectSize) {
 				let height = data.height
 				let width = data.width
+				let rectSizeArr = this.rectSize.split('/')
 
-				this.rectSize.split('/').some((item) => {
-					return `${width} * ${height}` === item.trim()
-				})
+				if (Array.isArray(rectSizeArr)) {
+					return rectSizeArr.some((item) => {
+						return `${width} * ${height}` === trim(item)
+					})
+				}
+				return `${width} * ${height}` === trim(this.rectSize)
 			}
+			return true
 		},
 		initFormData(data) {
 			let formData = new FormData()
