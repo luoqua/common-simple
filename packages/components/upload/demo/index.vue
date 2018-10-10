@@ -4,7 +4,8 @@
 			label-name="外层图片">
 			<Upload 
 				:upload-parm="parm"
-				:beforeUpload="beforeUpload"/>
+				:beforeUpload="beforeUpload"
+				:rect-size="rect"/>
 		</group-form>
 	</div>
 </template>
@@ -26,10 +27,10 @@ export default create({
 			radio_value: 1,
 			parm: {
 				key: '',
-				success_action_status: 200,
-				maxSize: 300,			// 默认单位是kb
-				rect: '800*800 / 640*800 / 800*640 / 800*450'
-			}
+				success_action_status: 200
+			},
+			maxSize: 300,			// 默认单位是kb
+			rect: ''
 		}
 	},
 	components: {
@@ -43,12 +44,14 @@ export default create({
 	},
 	methods: {
 		beforeUpload(file) {
-			const isltsize = Math.round((file.size / 1024) * 100) / 100 > this.maxSize
+			const isltsize = Math.round((file.size / 1024) * 100) / 100 < this.maxSize
 
 			if (!isltsize) {
 				return
 			}
+
 			this.parm.key = `${this.parm.dir}/${getRandom()}.${file.type.split('/').pop()}`
+
 			return isltsize
 		},
 		random_string() {

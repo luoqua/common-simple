@@ -107,7 +107,6 @@ export function getrangeRandom(min, max) {
  */
 export function readImgData(file){
 	let reader = new FileReader()
-	let accept = ['image/jpg','image/jpeg','image/png','image/bmp']
 	
 	return new Promise((resolve,reject) => {
 		

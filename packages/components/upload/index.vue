@@ -1,29 +1,19 @@
  <template>
 	<div :class="b()">
 		<Button  />
-		<input id="file" type="file" name="file" @change="upload($event)"/>
+		<input id="file" type="file" name="file" @change="upload($event)" multiple />
 
-		<ul class="mod-uploader" style="position: relative; display: block;">
-			<li class="mod-uploader__item" id="uploadItemWU_FILE_4">
-		        <div class="mod-uploader__meta">
-		            <span class="mod-uploader__name">snsvideodownload.png</span>
-		            <em class="mod-uploader__size">(155.62K)</em>
-		        </div>
-		        <div class="mod-uploader__process">
-		            <div class="mod-uploader__process-done" style="width: 20.3657%; transition: width 0.3s ease 0s;"></div>
-		        </div>
-    		</li>
-    	 </ul>
+		<Progress />
 
-    	 <div class="UploadPreview__wrp-2ZW22 ui-mt-15">
-    	 	<div class="UploadPreview__imgWrp-21R0D" style="background-image: url(&quot;http://wxsnsdythumb.wxs.qq.com/109/20204/snsvideodownload?m=917833e3d5c25e21c597793424d0720b&amp;filekey=30340201010420301e02016d040253480410917833e3d5c25e21c597793424d0720b0203026e79040d00000004627466730000000131&amp;hy=SH&amp;storeid=32303138313030373132333633343030303739396264313336666664393336663561333230613030303030303664&amp;bizid=1023&quot;);">
+    	<!-- <div :class="b('uploadPreview')" >
+    	 	<div :class="b('imgWrap')" v-for="(item,index) in imgWrap" :style="item.bg">
     	 		<a class="UploadPreview__imgOpr-1ENua">
     	 			<i class="icon__base-2qdgw icon__bin-Xt0w-" data-role="icon" style="vertical-align: 6px;">
-
+    	
     	 			</i>
     	 		</a>
-    	 </div>
-    	</div>
+    	 	</div>
+    	</div> -->
 	</div>
 </template>
 
@@ -31,6 +21,7 @@
 <script type="text/javascript">
 import create from '@/utils/create'
 import Button from '@/components/button'
+import Progress from '@/components/progress'
 import {upload} from '@/api/permission'
 import {readImgData,trim} from '@/utils/common'
 
@@ -44,16 +35,27 @@ export default create({
 		beforeUpload: {
 			type: Function,
 			default: () => true
-		}
+		},
+		rectSize: String,
+		afterUpload: Function
 	},
 	data() {
 		return {
+			uploadfile: []
 		}
 	},
-	mounted() {
+	computed: {
+		imgWrap() {
+			return this.uploadfile.map((item) => {
+				item.bg = {backgroundImage: `url(${item.url})`}
+				return item
+			})
+		}
 	},
+	mounted() {},
 	components: {
-		Button
+		Button,
+		Progress
 	},
 	methods: {
 		upload(e) {
@@ -64,14 +66,23 @@ export default create({
 			if (Array.isArray(files)) {
 
 				Promise.all(files.map(readImgData)).then((arr) => {
-					Promise.all(arr.map(readFile)).then((result) => {
-						console.log(result)
+					Promise.all(arr.map((item,index) =>
+						this.readFile(item,files[index])
+					)).then((result) => {
+						this.afterUpload(result)
+					}).catch(function(err) {
+						console.log(err)
 					})
 				})
 
 			} else {
 				readImgData(files).then(data => {
-					this.readFile(data,files)
+					this.readFile(data,files).then((result) => {
+						// this.uploadfile.push({url: `${staticURL}/${this.uploadParm.key}`})
+						this.afterUpload(result)
+					}).catch(function(err) {
+						console.log(err)
+					})
 				})
 			}
 
@@ -82,30 +93,42 @@ export default create({
 		readFile(data,files) {
 			let uploadParm = this.uploadParm || {}
 			let uploadStart
+			let resultParm
 
-			if (!this.handleRectSize(data)) {
-				return
-			}
-			if (!files || (this.beforeRead && !this.beforeRead(files))) {
-				return
-			}
-			if (this.accept && this.accept.indexOf(files.type) === -1) {
-				console.log('不支持当前上传文件类型')
+			return new Promise((resolve,reject) => {
 
-			}
-			uploadParm = this.initFormData(uploadParm)
+				if (!this.handleRectSize(data)) {
+					reject('尺寸大小不符合')
+					return
+				}
+				if (!files || (this.beforeUpload && !this.beforeUpload(files))) {
+					reject('尺寸大小不符合')
+					return
+				}
+				if (this.accept && this.accept.indexOf(files.type) === -1) {
+					console.log('不支持当前上传文件类型')
+					reject('尺寸大小不符合')
+					return
+				}
+				uploadParm = this.initFormData(uploadParm)
 
-			uploadParm.append('file',files)
+				uploadParm.append('file',files)
 
-			uploadStart = upload(uploadParm)
+				uploadStart = upload(uploadParm)
 
-			this.uploadProgress()
+				resultParm = JSON.parse(JSON.stringify(this.uploadParm))
 
-			uploadStart.then((result) => {
-				this.afterUpload(result)
+				this.uploadProgress()
+
+				uploadStart.then((result) => {
+					let res = Object.assign(result,resultParm)
+
+					resolve(res)
+				})
 			})
 		},
 		handleRectSize(data) {
+			console.log()
 			if (data && this.rectSize) {
 				let height = data.height
 				let width = data.width
@@ -113,10 +136,10 @@ export default create({
 
 				if (Array.isArray(rectSizeArr)) {
 					return rectSizeArr.some((item) => {
-						return `${width} * ${height}` === trim(item)
+						return `${width}*${height}` === trim(item)
 					})
 				}
-				return `${width} * ${height}` === trim(this.rectSize)
+				return `${width}*${height}` === trim(this.rectSize)
 			}
 			return true
 		},
@@ -135,5 +158,22 @@ export default create({
 
 
 <style type="text/css" lang="scss">
+	.simple-upload{
+		$p:&;
+		&__uploadPreview{
+			vertical-align: top;
+    		font-size: 0;
+    		margin-top: 15px;
+		}
+		&__imgWrap{
+			background-size: cover;
+    		background-position: 50%;
+    		width: 100px;
+		    height: 100px;
+		    margin-right: 10px;
+		    position: relative;
+		    display: inline-block;
+    	}
+	}
 
 </style>

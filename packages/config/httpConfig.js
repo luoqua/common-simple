@@ -108,7 +108,10 @@ http.trdapi = function(url,data,options) {
 		axios.
 			post(url,data,options)
 			.then(response => {
-				resolve(response)
+				if (response.status === 200) {
+					resolve(response)
+				}
+				reject(response)
 			})
 			.catch(e => {
 				reject(e)
