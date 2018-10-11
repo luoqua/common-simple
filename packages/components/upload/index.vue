@@ -2,14 +2,11 @@
 	<div :class="b()">
 		<Button  />
 		<input id="file" type="file" name="file" @change="upload($event)" multiple />
-
-		<Progress />
-
     	<!-- <div :class="b('uploadPreview')" >
     	 	<div :class="b('imgWrap')" v-for="(item,index) in imgWrap" :style="item.bg">
     	 		<a class="UploadPreview__imgOpr-1ENua">
     	 			<i class="icon__base-2qdgw icon__bin-Xt0w-" data-role="icon" style="vertical-align: 6px;">
-    	
+
     	 			</i>
     	 		</a>
     	 	</div>
@@ -21,7 +18,6 @@
 <script type="text/javascript">
 import create from '@/utils/create'
 import Button from '@/components/button'
-import Progress from '@/components/progress'
 import {upload} from '@/api/permission'
 import {readImgData,trim} from '@/utils/common'
 
@@ -54,8 +50,7 @@ export default create({
 	},
 	mounted() {},
 	components: {
-		Button,
-		Progress
+		Button
 	},
 	methods: {
 		upload(e) {
@@ -79,7 +74,14 @@ export default create({
 				readImgData(files).then(data => {
 					this.readFile(data,files).then((result) => {
 						// this.uploadfile.push({url: `${staticURL}/${this.uploadParm.key}`})
-						this.afterUpload(result)
+						// this.afterUpload(result)
+						let afterParm = {
+							result: result,
+							files: files
+						}
+
+						this.$emit('afterupload',afterParm)
+
 					}).catch(function(err) {
 						console.log(err)
 					})

@@ -5,7 +5,9 @@
 			<Upload 
 				:upload-parm="parm"
 				:beforeUpload="beforeUpload"
-				:rect-size="rect"/>
+				:rect-size="rect"
+				@afterupload="after" />
+			<Progress :file-list="uploadFile"/>
 		</group-form>
 	</div>
 </template>
@@ -17,6 +19,7 @@ import create from '@/utils/create'
 import groupForm from '@/components/group_form'
 import {getSignature} from '@/api/permission'
 import {getRandom} from '@/utils/common'
+import Progress from '@/components/progress'
 import Upload from '../index'
 
 export default create({
@@ -30,12 +33,14 @@ export default create({
 				success_action_status: 200
 			},
 			maxSize: 300,			// 默认单位是kb
-			rect: ''
+			rect: '',
+			uploadFile: []
 		}
 	},
 	components: {
 		groupForm,
-		Upload
+		Upload,
+		Progress
 	},
 	created() {
 		getSignature().then((data) => {
@@ -56,6 +61,10 @@ export default create({
 		},
 		random_string() {
 
+		},
+		after(value) {
+			console.log(value)
+			this.uploadFile.push(value.files)
 		}
 	}
 })

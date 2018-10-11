@@ -4,6 +4,7 @@ import { Menu, Submenu, MenuItem, MenuItemGroup, Dropdown, DropdownMenu, Dropdow
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/styles/base.css'
 import '@/styles/common.scss'
+import '@/styles/common/transition.scss'
 import { fetchPermission } from '@/api/permission'
 import UserToken,{ store, recursionRouter } from '@/store/store'
 import DynamicRoutes,{dynamicRoutes} from '@/router/index_init'

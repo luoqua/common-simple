@@ -1,0 +1,8 @@
+	.simple-progress-enter-active,
+	.simple-progress-leave-active {
+		transition: all 1s;
+	}
+	.simple-progress-enter, .simple-progress-leave-active {
+		opacity: 0;
+		transform:translateY(-30px)
+	}
