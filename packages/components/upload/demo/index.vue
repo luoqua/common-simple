@@ -7,7 +7,9 @@
 				:beforeUpload="beforeUpload"
 				:rect-size="rect"
 				@afterupload="after" />
-			<Progress :file-list="uploadFile"/>
+			<Progress 
+					:file-list="uploadFile"
+					:is-done="isdone"/>
 		</group-form>
 	</div>
 </template>
@@ -34,7 +36,8 @@ export default create({
 			},
 			maxSize: 300,			// 默认单位是kb
 			rect: '',
-			uploadFile: []
+			uploadFile: [],
+			isdone: false
 		}
 	},
 	components: {
@@ -63,7 +66,6 @@ export default create({
 
 		},
 		after(value) {
-			console.log(value)
 			this.uploadFile.push(value.files)
 		}
 	}

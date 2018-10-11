@@ -11,7 +11,8 @@
 	        <div :class="b('process')" >
 	            <div :class="b('process-done')"
 	            	:style="progress_percent"
-	            	></div>
+	            	>
+	            </div>
 	        </div>
 	    </li>
 	</transition-group>
@@ -44,14 +45,10 @@ export default create({
 	},
 	watch: {
 		fileList() {
+			this.setInc()
 			setTimeout(() => {
-				this.show = !this.show
-				this.setInc()
-				setTimeout(() => {
-					this.progressDone()
-				},1000)
-
-			},3000)
+				this.progressDone()
+			},1000)
 		}
 	},
 	methods: {
@@ -68,9 +65,6 @@ export default create({
 				this.processWidth = this.clamp(this.processWidth + (30 + (50 * Math.random()), 0, 99.4))
 				setTimeout(() => {
 					this.processWidth = 100
-					setTimeout(() => {
-						this.show = !this.show
-					},500)
 				})
 			},200)
 		},
