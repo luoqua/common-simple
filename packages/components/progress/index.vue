@@ -3,14 +3,14 @@
 		tag="ul"
 		name="simple-progress"
 		:class="b()">
-		<li :class="b('item')"  v-for="(item, index) in fileList" :key="index" >
+		<li :class="b('item')"  v-for="(item, index) in fileList" :key="index" v-if="item.processWidth !== 100">
 	        <div :class="b('meta')" >
 	            <span :class="b('name')" >{{item.name}}</span>
-	            <em :class="b('size')" >(155.62K)</em>
+	            <em :class="b('size')" >{{toSize(item.size)}}</em>
 	        </div>
 	        <div :class="b('process')" >
 	            <div :class="b('process-done')"
-	            	:style="progress_percent"
+	            	:style="{width:toPercent(item.processWidth)}"
 	            	>
 	            </div>
 	        </div>
@@ -28,44 +28,44 @@ export default create({
 		fileList: Array
 	},
 	data() {
-		return {
-			show: false,
-			processWidth: 0
-		}
+		return {}
 	},
 	components: {
 
 	},
-	computed: {
-		progress_percent() {
-			return {
-				width: ((this.processWidth * 100) / 100).toFixed(4) + '%'
-			}
-		}
-	},
 	watch: {
 		fileList() {
-			this.setInc()
-			setTimeout(() => {
-				this.progressDone()
-			},1000)
+			this.fileList.forEach((item,index) => {
+				if (item.isdone === false) {
+					this.setInc(item,index)
+				}
+				if (item.isdone === true && item.processWidth !== 100) {
+					this.progressDone(item,index)
+				}
+			})
 		}
 	},
 	methods: {
-		setInc() {
+		setInc(item,index) {
 			setTimeout(() => {
-				let processWidth = this.processWidth
+				let processWidth = item.processWidth
 
-				this.processWidth = this.clamp((Math.random() * 2) + processWidth,0, 99.6)
-				this.setInc()
+				item.processWidth = this.clamp((Math.random() * 2) + processWidth,0, 99.6)
+
+				this.$set(this.fileList,index,item)
 			},200)
 		},
-		progressDone() {
+		progressDone(item,index) {
 			setTimeout(() => {
-				this.processWidth = this.clamp(this.processWidth + (30 + (50 * Math.random()), 0, 99.4))
+				if (item.processWidth > 99) {
+					return
+				}
+				item.processWidth = this.clamp(item.processWidth + (30 + (50 * Math.random())), 0, 99.6)
+				this.$set(this.fileList,index,item)
 				setTimeout(() => {
-					this.processWidth = 100
-				})
+					item.processWidth = 100
+					this.$set(this.fileList,index,item)
+				},1000)
 			},200)
 		},
 		clamp(n,min,max) {
@@ -76,6 +76,12 @@ export default create({
 				return max
 			}
 			return n
+		},
+		toPercent(width) {
+			return Math.round((width * 100) / 100) + '%'
+		},
+		toSize(size) {
+			return (size / 1024 * 100 / 100).toFixed(2) + 'k'
 		}
 	}
 })

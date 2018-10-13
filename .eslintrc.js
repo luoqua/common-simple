@@ -181,7 +181,8 @@ module.exports = {
     "no-lone-blocks": 2,//禁止不必要的嵌套块
     "no-lonely-if": 2,//禁止else语句内只有if语句
     "no-loop-func": 1,//禁止在循环中使用函数（如果没有引用外部变量不形成闭包就可以）
-    "no-mixed-requires": [0, false],//声明时不能混用声明类型
+    "no-mixed-requires": [0, false],//声明时不能混用声明类型,
+    "no-mixed-operators":0,//禁止混用*和/
     "no-mixed-spaces-and-tabs": [0, false],//禁止混用tab和空格
     "linebreak-style": [0, "windows"],//换行风格
     "no-multi-spaces": 1,//不能用多余的空格
@@ -304,6 +305,7 @@ module.exports = {
     "vars-on-top": 0,//var必须放在作用域顶部
     "wrap-iife": [2, "inside"],//立即执行函数表达式的小括号风格
     "wrap-regex": 0,//正则表达式字面量用小括号包起来
+    "array-callback-return":0,//箭头函数必须要返回一个值
     "yoda": [2, "never"],//禁止尤达条件
      // @fixable if, function 等的大括号之前必须要有空格，比如 if (a) {
     'space-before-blocks': [

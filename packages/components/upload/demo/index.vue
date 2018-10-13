@@ -2,18 +2,21 @@
 	<div>
 		<group-form
 			label-name="外层图片">
-			<Upload 
+			<Upload
 				:upload-parm="parm"
 				:beforeUpload="beforeUpload"
 				:rect-size="rect"
-				@afterupload="after" />
-			<Progress 
+				@getFile="getFile"
+				:uploadProgress="uploadProgress" 
+				:AfterUpload="AfterUpload"/>
+			<Progress
 					:file-list="uploadFile"
 					:is-done="isdone"/>
+			<preview-list 
+					:img-wrap="imgList"/>
 		</group-form>
 	</div>
 </template>
-
 
 
 <script type="text/javascript">
@@ -23,6 +26,7 @@ import {getSignature} from '@/api/permission'
 import {getRandom} from '@/utils/common'
 import Progress from '@/components/progress'
 import Upload from '../index'
+import previewList from '../preview-list'
 
 export default create({
 	name: 'radio-demo',
@@ -37,13 +41,15 @@ export default create({
 			maxSize: 300,			// 默认单位是kb
 			rect: '',
 			uploadFile: [],
-			isdone: false
+			isdone: false,
+			imgList: []
 		}
 	},
 	components: {
 		groupForm,
 		Upload,
-		Progress
+		Progress,
+		previewList
 	},
 	created() {
 		getSignature().then((data) => {
@@ -65,8 +71,24 @@ export default create({
 		random_string() {
 
 		},
+		AfterUpload(file) {
+			console.log(file)
+			//this.imgList.push(file)
+		},
+		getFile(file) {
+			setTimeout(() => {
+				this.uploadFile.map((item) => {
+					if (item.Index === file.Index) {
+						item.isdone = true
+					}
+				})
+			},1000)
+		},
 		after(value) {
 			this.uploadFile.push(value.files)
+		},
+		uploadProgress(file) {
+			this.uploadFile.push(Object.assign(file,{isdone: false,processWidth: 0}))
 		}
 	}
 })

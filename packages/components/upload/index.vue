@@ -2,15 +2,6 @@
 	<div :class="b()">
 		<Button  />
 		<input id="file" type="file" name="file" @change="upload($event)" multiple />
-    	<!-- <div :class="b('uploadPreview')" >
-    	 	<div :class="b('imgWrap')" v-for="(item,index) in imgWrap" :style="item.bg">
-    	 		<a class="UploadPreview__imgOpr-1ENua">
-    	 			<i class="icon__base-2qdgw icon__bin-Xt0w-" data-role="icon" style="vertical-align: 6px;">
-
-    	 			</i>
-    	 		</a>
-    	 	</div>
-    	</div> -->
 	</div>
 </template>
 
@@ -33,11 +24,14 @@ export default create({
 			default: () => true
 		},
 		rectSize: String,
-		afterUpload: Function
+		afterUpload: Function,
+		uploadProgress: Function,
+		AfterUpload: Function
 	},
 	data() {
 		return {
-			uploadfile: []
+			uploadfile: [],
+			Index: 0
 		}
 	},
 	computed: {
@@ -64,7 +58,7 @@ export default create({
 					Promise.all(arr.map((item,index) =>
 						this.readFile(item,files[index])
 					)).then((result) => {
-						this.afterUpload(result)
+
 					}).catch(function(err) {
 						console.log(err)
 					})
@@ -73,23 +67,17 @@ export default create({
 			} else {
 				readImgData(files).then(data => {
 					this.readFile(data,files).then((result) => {
-						// this.uploadfile.push({url: `${staticURL}/${this.uploadParm.key}`})
-						// this.afterUpload(result)
-						let afterParm = {
+						let resultParm = {
 							result: result,
 							files: files
 						}
-
-						this.$emit('afterupload',afterParm)
-
+						
+						this.AfterUpload && this.AfterUpload(resultParm)
 					}).catch(function(err) {
 						console.log(err)
 					})
 				})
 			}
-
-		},
-		uploadProgress() {
 
 		},
 		readFile(data,files) {
@@ -114,16 +102,23 @@ export default create({
 				}
 				uploadParm = this.initFormData(uploadParm)
 
+				this.Index++
+
+				files.Index = this.Index
+
 				uploadParm.append('file',files)
 
 				uploadStart = upload(uploadParm)
 
 				resultParm = JSON.parse(JSON.stringify(this.uploadParm))
 
-				this.uploadProgress()
+				this.uploadProgress && this.uploadProgress(files)
 
 				uploadStart.then((result) => {
+
 					let res = Object.assign(result,resultParm)
+
+					this.$emit('getFile',files)
 
 					resolve(res)
 				})
