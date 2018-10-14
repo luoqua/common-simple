@@ -28,7 +28,11 @@ export default create({
 
 	},
 	methods: {
-
+		toStyleBg(img) {
+			return {
+				backgroundImage: `url(${staticURL + img})`
+			}
+		}
 	}
 })
 </script>

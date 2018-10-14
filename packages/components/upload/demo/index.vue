@@ -27,6 +27,7 @@ import {getRandom} from '@/utils/common'
 import Progress from '@/components/progress'
 import Upload from '../index'
 import previewList from '../preview-list'
+import {staticURL} from '@/config/baseUrl'
 
 export default create({
 	name: 'radio-demo',
@@ -72,8 +73,13 @@ export default create({
 
 		},
 		AfterUpload(file) {
-			console.log(file)
-			//this.imgList.push(file)
+			let imgList = []
+
+			imgList = Array.isArray(file) ? file : [file]
+
+			Object.keys(imgList).forEach((key) => {
+
+			})
 		},
 		getFile(file) {
 			setTimeout(() => {
