@@ -1,6 +1,6 @@
 <template>
 	<div :class="b('')" >
-	 	<div :class="b('imgWrap')" v-for="(item,index) in imgWrap" :style="item.bg">
+	 	<div :class="b('imgWrap')" v-for="(item,index) in imgWrap" :style="toStyleBg(item)">
 	 		<a class="UploadPreview__imgOpr-1ENua">
 	 			<i class="icon__base-2qdgw icon__bin-Xt0w-" data-role="icon" style="vertical-align: 6px;">
 
@@ -30,7 +30,7 @@ export default create({
 	methods: {
 		toStyleBg(img) {
 			return {
-				backgroundImage: `url(${staticURL + img})`
+				backgroundImage: `url(${img})`
 			}
 		}
 	}

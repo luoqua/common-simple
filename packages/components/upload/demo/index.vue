@@ -7,12 +7,12 @@
 				:beforeUpload="beforeUpload"
 				:rect-size="rect"
 				@getFile="getFile"
-				:uploadProgress="uploadProgress" 
+				:uploadProgress="uploadProgress"
 				:AfterUpload="AfterUpload"/>
 			<Progress
 					:file-list="uploadFile"
 					:is-done="isdone"/>
-			<preview-list 
+			<preview-list
 					:img-wrap="imgList"/>
 		</group-form>
 	</div>
@@ -25,9 +25,9 @@ import groupForm from '@/components/group_form'
 import {getSignature} from '@/api/permission'
 import {getRandom} from '@/utils/common'
 import Progress from '@/components/progress'
+import {staticURL} from '@/config/baseUrl'
 import Upload from '../index'
 import previewList from '../preview-list'
-import {staticURL} from '@/config/baseUrl'
 
 export default create({
 	name: 'radio-demo',
@@ -77,18 +77,19 @@ export default create({
 
 			imgList = Array.isArray(file) ? file : [file]
 
-			Object.keys(imgList).forEach((key) => {
-
+			this.imgList = imgList.map((item) => {
+				return item = staticURL + item.result.key
 			})
+
 		},
 		getFile(file) {
-			setTimeout(() => {
+			setTimeout(()=>{
 				this.uploadFile.map((item) => {
 					if (item.Index === file.Index) {
 						item.isdone = true
 					}
 				})
-			},1000)
+			})
 		},
 		after(value) {
 			this.uploadFile.push(value.files)

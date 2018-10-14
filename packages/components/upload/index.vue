@@ -58,7 +58,7 @@ export default create({
 					Promise.all(arr.map((item,index) =>
 						this.readFile(item,files[index])
 					)).then((result) => {
-
+						this.AfterUpload && this.AfterUpload(result)
 					}).catch(function(err) {
 						console.log(err)
 					})
@@ -67,12 +67,7 @@ export default create({
 			} else {
 				readImgData(files).then(data => {
 					this.readFile(data,files).then((result) => {
-						let resultParm = {
-							result: result,
-							files: files
-						}
-						
-						this.AfterUpload && this.AfterUpload(resultParm)
+						this.AfterUpload && this.AfterUpload(result)
 					}).catch(function(err) {
 						console.log(err)
 					})
@@ -116,9 +111,13 @@ export default create({
 
 				uploadStart.then((result) => {
 
-					let res = Object.assign(result,resultParm)
+					let res = {
+						result: Object.assign(result,resultParm),
+						files: files
+					}
 
 					this.$emit('getFile',files)
+
 
 					resolve(res)
 				})
