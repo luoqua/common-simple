@@ -8,12 +8,28 @@
 				:rect-size="rect"
 				@getFile="getFile"
 				:uploadProgress="uploadProgress"
-				:AfterUpload="AfterUpload"/>
+				:AfterUpload="AfterUpload">
+				<Button />
+				<p slot="tip">
+					<span>
+						<!-- react-text: 150 -->图片格式：大小不超过300KB，不支持GIF格式<!-- /react-text -->
+						<br><!-- react-text: 152 -->文字占图片篇幅不超过30%<!-- /react-text -->
+						<br><!-- react-text: 154 -->朋友圈广告： <!-- /react-text -->
+						<br><!-- react-text: 156 -->1.在投放朋友圈广告时，此图会同步作为朋友圈外层图<!-- /react-text -->
+						<br><!-- react-text: 158 -->2.适配“常规广告”图片尺寸：800像素 * 800像素 /  640像素 * 800像素 / 800像素 * 640像素<!-- /react-text -->
+						<br><!-- react-text: 160 -->3.适配“卡片广告”图片尺寸：800像素 * 450像素<!-- /react-text -->
+						<br><!-- react-text: 162 -->公众号广告：<!-- /react-text -->
+						<br><!-- react-text: 164 -->支持如下尺寸：800像素 * 800像素 / 640像素 * 800像素 / 800像素 * 640像素 / 800像素 * 450像素<!-- /react-text -->
+						<br>
+					</span>
+				</p>
+			</Upload>
 			<Progress
 					:file-list="uploadFile"
 					:is-done="isdone"/>
 			<preview-list
-					:img-wrap="imgList"/>
+					:img-wrap="imgList"
+					@delFile="delfile"/>
 		</group-form>
 	</div>
 </template>
@@ -26,6 +42,7 @@ import {getSignature} from '@/api/permission'
 import {getRandom} from '@/utils/common'
 import Progress from '@/components/progress'
 import {staticURL} from '@/config/baseUrl'
+import Button from '@/components/button'
 import Upload from '../index'
 import previewList from '../preview-list'
 
@@ -50,7 +67,8 @@ export default create({
 		groupForm,
 		Upload,
 		Progress,
-		previewList
+		previewList,
+		Button
 	},
 	created() {
 		getSignature().then((data) => {
@@ -83,7 +101,7 @@ export default create({
 
 		},
 		getFile(file) {
-			setTimeout(()=>{
+			setTimeout(() => {
 				this.uploadFile.map((item) => {
 					if (item.Index === file.Index) {
 						item.isdone = true
@@ -96,6 +114,11 @@ export default create({
 		},
 		uploadProgress(file) {
 			this.uploadFile.push(Object.assign(file,{isdone: false,processWidth: 0}))
+		},
+		delfile(index) {
+			this.uploadFile.splice(index,1)
+			this.imgList.splice(index,1)
+			console.log(this.imgList)
 		}
 	}
 })

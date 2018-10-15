@@ -1,14 +1,16 @@
  <template>
 	<div :class="b()">
-		<Button  />
+		<slot  />
 		<input id="file" type="file" name="file" @change="upload($event)" multiple />
+		<div :class="b('formTip')">
+			<slot name="tip"></slot>
+		</div>
 	</div>
 </template>
 
 
 <script type="text/javascript">
 import create from '@/utils/create'
-import Button from '@/components/button'
 import {upload} from '@/api/permission'
 import {readImgData,trim} from '@/utils/common'
 
@@ -43,9 +45,6 @@ export default create({
 		}
 	},
 	mounted() {},
-	components: {
-		Button
-	},
 	methods: {
 		upload(e) {
 			let files = e.target.files
@@ -155,21 +154,20 @@ export default create({
 
 <style type="text/css" lang="scss">
 	.simple-upload{
+		position: relative;
 		$p:&;
-		&__uploadPreview{
-			vertical-align: top;
-    		font-size: 0;
-    		margin-top: 15px;
+		input[type='file']{
+			@include pos-ab;
+			@include wh(100%,100%);
+			cursor: pointer;
+			opacity: 0;
 		}
-		&__imgWrap{
-			background-size: cover;
-    		background-position: 50%;
-    		width: 100px;
-		    height: 100px;
-		    margin-right: 10px;
-		    position: relative;
-		    display: inline-block;
-    	}
+		&__formTip{
+			margin-top: 8px;
+		    font-size: 13px;
+		    line-height: 22px;
+		    color: #8f9196;
+		}
 	}
 
 </style>

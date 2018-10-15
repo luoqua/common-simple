@@ -1,13 +1,16 @@
 <template>
-	<div :class="b('')" >
-	 	<div :class="b('imgWrap')" v-for="(item,index) in imgWrap" :style="toStyleBg(item)">
-	 		<a class="UploadPreview__imgOpr-1ENua">
-	 			<i class="icon__base-2qdgw icon__bin-Xt0w-" data-role="icon" style="vertical-align: 6px;">
-
-	 			</i>
-	 		</a>
-	 	</div>
-	</div>
+	<transition-group
+		tag="div"
+		:class="b('')"
+		name="preview-list">
+		 	<span :class="b('imgWrap')" v-for="(item,index) in imgWrap" 
+		 	:style="toStyleBg(item)"
+		 	:key='item'>
+		 		<a :class="b('operator')" @click="del(index)">
+		 			<i class="iconfont icon-shanchu"></i>
+		 		</a>
+		 	</span>
+	</transition-group>
 </template>
 
 
@@ -32,6 +35,9 @@ export default create({
 			return {
 				backgroundImage: `url(${img})`
 			}
+		},
+		del(index) {
+			this.$emit('delFile',index)
 		}
 	}
 })
@@ -52,6 +58,26 @@ export default create({
 	    margin-right: 10px;
 	    position: relative;
 	    display: inline-block;
+	    #{$p}__operator{
+	    	position: absolute;
+		    height: 22px;
+		    bottom: 0;
+		    left: 0;
+		    background-color: rgba(0,0,0,.5);
+		    z-index: 1;
+		    width: 100%;
+		    text-align: center;
+		    cursor: pointer;
+	    	&:hover{
+	    		text-decoration: none;
+	    		.icon-shanchu{
+	    			color: #c6c4c4;
+	    		}
+	    	}
+		    .icon-shanchu{
+		    	color: #b2b2b2;
+		    }
+	    }
 	}
 }
 

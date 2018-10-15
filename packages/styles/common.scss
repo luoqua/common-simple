@@ -20,6 +20,14 @@ $designWidth : 750;
 	left: $left;
 }
 
+@mixin pos-ab($top:0,$left:0,$bottom:0,$right:0){
+	position: absolute;
+	left: $left;
+	top: $top;
+	bottom: $bottom;
+	right:$right;
+}
+
 //定位全屏
 @mixin allcover {
 	position: fixed;
