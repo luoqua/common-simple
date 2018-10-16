@@ -31,42 +31,40 @@ export default create({
 		return {}
 	},
 	components: {
-
 	},
 	watch: {
 		fileList() {
 			this.fileList.forEach((item,index) => {
-				if (item.isdone === false) {
+				if (item.processWidth === 0) {
 					this.setInc(item,index)
-				}
-				if (item.isdone === true && item.processWidth !== 100) {
-					this.progressDone(item,index)
 				}
 			})
 		}
 	},
 	methods: {
 		setInc(item,index) {
-			setTimeout(() => {
+			requestAnimationFrame(() => {
 				let processWidth = item.processWidth
 
-				item.processWidth = this.clamp((Math.random() * 2) + processWidth,0, 99.6)
-
-				this.$set(this.fileList,index,item)
-			},200)
-		},
-		progressDone(item,index) {
-			setTimeout(() => {
-				if (item.processWidth > 99) {
+				if (item.processWidth === 60.6 && item.isdone === true) {
+					this.progressDone(item,index)
 					return
 				}
-				item.processWidth = this.clamp(item.processWidth + (30 + (50 * Math.random())), 0, 99.6)
+				item.processWidth = this.clamp((Math.random() * 2) + processWidth,0, 60.6)
+				this.$set(this.fileList,index,item)
+				this.setInc(item,index)
+
+			})
+		},
+		progressDone(item,index) {
+			if (item.processWidth > 60 && item.processWidth < 100) {
+				item.processWidth = this.clamp((Math.random() * 20 + 30) + item.processWidth,99.5, 99.6)
 				this.$set(this.fileList,index,item)
 				setTimeout(() => {
 					item.processWidth = 100
 					this.$set(this.fileList,index,item)
 				},1000)
-			},200)
+			}
 		},
 		clamp(n,min,max) {
 			if (n < min) {
@@ -138,6 +136,4 @@ export default create({
 		    transition: width 0.3s ease 0s;
 	    }
 	}
-
-
 </style>

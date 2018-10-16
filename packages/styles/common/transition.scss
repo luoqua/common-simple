@@ -8,14 +8,11 @@
 }
 
 
-.preview-list-enter-active,
-.preview-list-leave-active{
-	transition: all 1s;
-}
+
 .preview-list-enter,.preview-list-leave-to {
 	opacity: 0;
 	transform:translateY(30px);
 }
-.preview-list-move{
-	transition: transform 1s;
+.preview-list-leave-active{
+	position: absolute;
 }

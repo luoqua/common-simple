@@ -56,7 +56,7 @@ export default create({
 				key: '',
 				success_action_status: 200
 			},
-			maxSize: 300,			// 默认单位是kb
+			maxSize: 3000,			// 默认单位是kb
 			rect: '',
 			uploadFile: [],
 			isdone: false,
@@ -101,12 +101,10 @@ export default create({
 
 		},
 		getFile(file) {
-			setTimeout(() => {
-				this.uploadFile.map((item) => {
-					if (item.Index === file.Index) {
-						item.isdone = true
-					}
-				})
+			this.uploadFile.map((item) => {
+				if (item.Index === file.Index) {
+					item.isdone = true
+				}
 			})
 		},
 		after(value) {
@@ -118,7 +116,6 @@ export default create({
 		delfile(index) {
 			this.uploadFile.splice(index,1)
 			this.imgList.splice(index,1)
-			console.log(this.imgList)
 		}
 	}
 })

@@ -57,7 +57,9 @@ export default create({
 					Promise.all(arr.map((item,index) =>
 						this.readFile(item,files[index])
 					)).then((result) => {
-						this.AfterUpload && this.AfterUpload(result)
+						setTimeout(() => {
+							this.AfterUpload && this.AfterUpload(result)
+						},500)
 					}).catch(function(err) {
 						console.log(err)
 					})
@@ -66,7 +68,9 @@ export default create({
 			} else {
 				readImgData(files).then(data => {
 					this.readFile(data,files).then((result) => {
-						this.AfterUpload && this.AfterUpload(result)
+						setTimeout(() => {
+							this.AfterUpload && this.AfterUpload(result)
+						},500)
 					}).catch(function(err) {
 						console.log(err)
 					})
@@ -117,13 +121,11 @@ export default create({
 
 					this.$emit('getFile',files)
 
-
 					resolve(res)
 				})
 			})
 		},
 		handleRectSize(data) {
-			console.log()
 			if (data && this.rectSize) {
 				let height = data.height
 				let width = data.width

@@ -47,7 +47,6 @@ export default create({
 <style type="text/css" lang="scss">
 .simple-preview-list{
 	vertical-align: top;
-	font-size: 0;
 	margin-top: 15px;
 	$p:&;
 	&__imgWrap{
@@ -56,18 +55,19 @@ export default create({
 		width: 100px;
 	    height: 100px;
 	    margin-right: 10px;
-	    position: relative;
 	    display: inline-block;
+	    line-height: 100px;
+	    transition:all 1s;
 	    #{$p}__operator{
-	    	position: absolute;
-		    height: 22px;
-		    bottom: 0;
-		    left: 0;
 		    background-color: rgba(0,0,0,.5);
 		    z-index: 1;
 		    width: 100%;
 		    text-align: center;
 		    cursor: pointer;
+		    line-height: 22px;
+		    display: inline-block;
+		    vertical-align: bottom;
+		    position: relative;
 	    	&:hover{
 	    		text-decoration: none;
 	    		.icon-shanchu{
