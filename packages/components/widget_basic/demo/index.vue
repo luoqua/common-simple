@@ -1,9 +1,19 @@
 <template>
 	<div>
-		<widget-basic v-for="(i,index) in 2" :key="index" v-model="index">
-			<Radio />
-			<Upload />
-		</widget-basic>
+		<transition-group
+			tag="div"
+			name="widget-basic-list">
+			<widget-basic v-for="(item,index) in basic" 
+							:key="item.id"
+							:length="basic.length" 
+							v-model="index"
+							@move="moveUpdown"
+							@del="del"
+							:title="item.title">
+				<Radio />
+				<Upload />
+			</widget-basic>
+		</transition-group>
 	</div>
 </template>
 
@@ -13,6 +23,7 @@
 import create from '@/utils/create'
 import Radio from '@/components/radio/demo'
 import Upload from '@/components/upload/demo'
+import {move2downUp} from '@/utils/common.js'
 import widgetBasic from '../index.vue'
 
 export default create({
@@ -20,7 +31,32 @@ export default create({
 	props: [],
 	data() {
 		return {
-			basic_num: 2,
+			basic: [
+				{	
+					id: 110,
+					title: '页面标题'
+				},
+				{
+					id: 111,
+					title: '图片'
+				},
+				{
+					id: 112,
+					title: '页面标题'
+				},
+				{
+					id: 113,
+					title: '图片'
+				},
+				{
+					id: 114,
+					title: '页面标题'
+				},
+				{
+					id: 115,
+					title: '图片'
+				}
+			]
 		}
 	},
 	components: {
@@ -29,12 +65,17 @@ export default create({
 		Upload
 	},
 	methods: {
-
+		moveUpdown(start,end) {
+			this.basic = move2downUp(this.basic,start,end)
+		},
+		del(index) {
+			this.basic.splice(index,1)
+		}
 	}
 })
 </script>
 
 
-<style type="text/css" lang="scss"    >
+<style type="text/css" lang="scss">
 
 </style>

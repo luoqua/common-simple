@@ -16,3 +16,13 @@
 .preview-list-leave-active{
 	position: absolute;
 }
+
+
+.widget-basic-list-leave-active{
+	position: absolute;
+}
+
+.widget-basic-list-enter, .widget-basic-list-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}

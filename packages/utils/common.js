@@ -156,3 +156,19 @@ export function trim(str) {
 export function lrtrim(str) {
 	return str.replace(/^\s*|\s*$/g,'')
 }
+
+/**
+ * 上下移动数组元素
+ * @param  {[Array]} arr   [需要改变元素位置的数组]
+ * @param  {[Number]} start [需要下移的元素]
+ * @param  {[Number]} end   [需要上移的元素]
+ * @return {[Array]}       [已经改变位置的数组]
+ */
+export function move2downUp(arr,start,end){
+	let moveArr =  [...arr]
+	if(Array.isArray(moveArr)){
+		let endstr = moveArr.splice(end,1)
+		moveArr.splice(start,0,...endstr)
+	}
+	return moveArr
+}

@@ -1,6 +1,6 @@
 <template>
 	<div :class="b()">
-		<label :class="b('label')">{{labelName}}</label>
+		<label :class="b('label')" :style="isMargintop">{{labelName}}</label>
 		<div :class="b('modform')">
 			<slot></slot>
 		</div>
@@ -17,6 +17,18 @@ export default create({
 	props: {
 		labelName: {
 			type: String
+		},
+		isTop: {
+			type: Boolean,
+			default: true
+		}
+	},
+	computed: {
+		isMargintop() {
+			return {
+				marginTop: this.isTop ? '0.5em' : '0px',
+				width: this.isTop ? '4em' : '6em'
+			}
 		}
 	},
 	data() {
@@ -41,7 +53,6 @@ export default create({
 		    margin-right: 28px;
 		    font-size: 14px;
 			margin-left: 16px;
-			margin-top: 0.3em;
 			margin-top: 0px;
     		width: 4em;
 		}

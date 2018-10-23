@@ -1,10 +1,10 @@
 <template>
-<div :class="b()">
+<div :class="b()" >
 	<div :class="b('head')" >
-		<span :class="b('title')">页面顶部</span>
+		<span :class="b('title')">{{title}}</span>
 	 	<div :class="b('right')">
 	 		<simple-operator></simple-operator>
-
+			<span :class="b('boderline')"></span>
 	 		<a href="javascript:void(0);" @click="togglePick">{{message}}</a>
 	 	</div>
 	</div>
@@ -22,10 +22,13 @@
 <script type="text/javascript">
 import create from '@/utils/create'
 
+
 export default create({
 	name: 'widget-basic',
 	props: {
-		value: null
+		value: null,
+		title: null,
+		length: null
 	},
 	data() {
 		return {
@@ -51,16 +54,20 @@ export default create({
 		'simple-operator': {
 			functional: true,
 			render(createElement, context) {
-				const parent = context.parent.value
-				const graparent = context.parent.parent
-				let basic_num = [...,graparent[value],graparent[value-1],...] = graparent.basic_num
+				let index = context.parent.value
+				let operator
+				let length = context.parent.length
+
 				const del = {
 					domProps: {
 					    innerHTML: '删除'
 					},
+					'class': {
+					    del: true
+					},
 					on: {
-						del() {
-							console.log('del')
+						click() {
+							context.parent.$emit('del',index)
 						}
 					}
 				}
@@ -68,9 +75,12 @@ export default create({
 					domProps: {
 					    innerHTML: '上移'
 					},
+					'class': {
+						move: true
+					},
 					on: {
-						up() {
-							console.log('up')
+						click() {
+							context.parent.$emit('move',index-1,index)
 						}
 					}
 				}
@@ -78,14 +88,30 @@ export default create({
 					domProps: {
 					    innerHTML: '下移'
 					},
+					'class': {
+						move: true
+					},
 					on: {
-						down() {
-							console.log('down')
+						click() {
+							context.parent.$emit('move',index,index+1)
 						}
 					}
 				}
 
-				let operator = [del,up,down]
+					
+				switch(index){
+					case 0:
+					operator = []
+					break
+					case 1:
+					operator = [del,down]
+					break
+					case length-1:
+					operator = [del,up]
+					break
+					default:
+					operator = [del,up,down]
+				}
 
 				return operator.map((item) => {
 					return createElement('a',item)
@@ -107,7 +133,7 @@ export default create({
 	.simple-widget-basic{
 		margin-bottom: 8px;
 	    border-radius: 2px;
-	    position: relative;
+	    transition: all 1s;
 	    $p:&;
 	    &__head{
 	    	background: #fafbfc;
@@ -119,11 +145,37 @@ export default create({
 		    	background: #f4f5f7;
     			border-color: #d3d4d6;
 		    }
+		    a{
+		    	cursor: pointer;
+		    }
 		    #{$p}__title{
 	    		color: #8f9196;
 	    	}
 	    	#{$p}__right{
 	    		float: right;
+	    	}
+	    	#{$p}__boderline{
+	    		border-left: 1px solid #e1e3e9;
+			    margin-left: 10px;
+			    margin-right: 10px;
+			    height: 10px;
+			    display: inline-block;
+	    	}
+	    	.del{
+	    		color: #8f9196;
+    			margin-left: 10px;
+    			&:hover{
+    				color: #65676e;
+    				text-decoration: none;
+    			}
+	    	}
+	    	.move{
+	    		color: #8f9196;
+    			margin-left: 10px;
+    			&:hover{
+    				color: #65676e;
+    				text-decoration: none;
+    			}
 	    	}
 	    }
 	    &__body{

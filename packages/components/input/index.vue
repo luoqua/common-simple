@@ -27,14 +27,12 @@ export default create({
 			type: Number,
 			default: 10
 		},
-		formTip: {
-			type: String,
-			default: '用于记录生成页'
-		}
+		formTip: null,
+		initValue: null
 	},
 	data() {
 		return {
-			value: '一二'
+			value: this.initValue
 		}
 	},
 	computed: {
