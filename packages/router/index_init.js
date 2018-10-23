@@ -7,6 +7,7 @@ import Index from '@/pages/layout/Layout'
 import Editpage from '@/pages/page_edit'
 import Input from '@/components/input/demo'
 import WidgetBasic from '@/components/widget_basic/demo'
+import componentTest from '@/components/component_test/index'
 /* export const DynamicRoutes = [
 	{
 		path: '',
@@ -76,6 +77,14 @@ const DynamicRoutes = [
 				meta: {
 					requireAuth: true,
 					name: '基础组件'
+				}
+			},
+			{
+				path: '/component/component_test',
+				component: componentTest,
+				meta: {
+					requireAuth: true,
+					name: '组件调试'
 				}
 			}
 		]

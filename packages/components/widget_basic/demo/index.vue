@@ -1,8 +1,10 @@
 <template>
-	<widget-basic>
-		<Radio />
-		<Upload />
-	</widget-basic>
+	<div>
+		<widget-basic v-for="(i,index) in 2" :key="index" v-model="index">
+			<Radio />
+			<Upload />
+		</widget-basic>
+	</div>
 </template>
 
 
@@ -18,6 +20,7 @@ export default create({
 	props: [],
 	data() {
 		return {
+			basic_num: 2,
 		}
 	},
 	components: {

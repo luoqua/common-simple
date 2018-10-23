@@ -3,10 +3,13 @@
 	<div :class="b('head')" >
 		<span :class="b('title')">页面顶部</span>
 	 	<div :class="b('right')">
-	 		<a href="javascript:void(0);">展开</a>
+	 		<simple-operator></simple-operator>
+
+	 		<a href="javascript:void(0);" @click="togglePick">{{message}}</a>
 	 	</div>
 	</div>
-	<div :class="b('body')">
+	<div :class="b('body')" 
+		 :style="maxheight">
 		<div :class="b('padding')">
 			<slot></slot>
 		</div>
@@ -21,13 +24,80 @@ import create from '@/utils/create'
 
 export default create({
 	name: 'widget-basic',
-	props: [],
+	props: {
+		value: null
+	},
 	data() {
 		return {
+			toggle: true
+		}
+	},
+	computed: {
+		message() {
+			const toggle = this.toggle
+
+			return toggle === false ? '收起' : '展开'
+		},
+		maxheight() {
+			const toggle = this.toggle
+
+			return {
+				maxHeight: toggle === false ? '1500px' : '0px',
+			    overflow: toggle === false ? 'initial' : 'hidden'
+			}
+		}
+	},
+	components: {
+		'simple-operator': {
+			functional: true,
+			render(createElement, context) {
+				const parent = context.parent.value
+				const graparent = context.parent.parent
+				let basic_num = [...,graparent[value],graparent[value-1],...] = graparent.basic_num
+				const del = {
+					domProps: {
+					    innerHTML: '删除'
+					},
+					on: {
+						del() {
+							console.log('del')
+						}
+					}
+				}
+				const up = {
+					domProps: {
+					    innerHTML: '上移'
+					},
+					on: {
+						up() {
+							console.log('up')
+						}
+					}
+				}
+				const down = {
+					domProps: {
+					    innerHTML: '下移'
+					},
+					on: {
+						down() {
+							console.log('down')
+						}
+					}
+				}
+
+				let operator = [del,up,down]
+
+				return operator.map((item) => {
+					return createElement('a',item)
+				})
+
+			}
 		}
 	},
 	methods: {
-
+		togglePick() {
+			this.toggle = !this.toggle
+		}
 	}
 })
 </script>
@@ -59,7 +129,7 @@ export default create({
 	    &__body{
 	    	max-height: 1500px;
 		    transition-duration: .3s;
-		    transition-timing-function: ease-in;
+			transition-timing-function: cubic-bezier(0,1,.5,1);
 		    #{$p}__padding{
 		    	color: #111;
 			    border: 1px solid #e3e4e6;
