@@ -8,7 +8,7 @@
 	 		<a href="javascript:void(0);" @click="togglePick">{{message}}</a>
 	 	</div>
 	</div>
-	<div :class="b('body')" 
+	<div :class="b('body')"
 		 :style="maxheight">
 		<div :class="b('padding')">
 			<slot></slot>
@@ -16,7 +16,6 @@
 	</div>
 </div>
 </template>
-
 
 
 <script type="text/javascript">
@@ -62,7 +61,7 @@ export default create({
 					domProps: {
 					    innerHTML: '删除'
 					},
-					'class': {
+					class: {
 					    del: true
 					},
 					on: {
@@ -75,12 +74,12 @@ export default create({
 					domProps: {
 					    innerHTML: '上移'
 					},
-					'class': {
+					class: {
 						move: true
 					},
 					on: {
 						click() {
-							context.parent.$emit('move',index-1,index)
+							context.parent.$emit('move',index - 1,index)
 						}
 					}
 				}
@@ -88,29 +87,29 @@ export default create({
 					domProps: {
 					    innerHTML: '下移'
 					},
-					'class': {
+					class: {
 						move: true
 					},
 					on: {
 						click() {
-							context.parent.$emit('move',index,index+1)
+							context.parent.$emit('move',index,index + 1)
 						}
 					}
 				}
 
-					
-				switch(index){
+
+				switch (index) {
 					case 0:
-					operator = []
-					break
+						operator = []
+						break
 					case 1:
-					operator = [del,down]
-					break
-					case length-1:
-					operator = [del,up]
-					break
+						operator = [del,down]
+						break
+					case length - 1:
+						operator = [del,up]
+						break
 					default:
-					operator = [del,up,down]
+						operator = [del,up,down]
 				}
 
 				return operator.map((item) => {

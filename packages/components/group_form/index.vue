@@ -42,7 +42,7 @@ export default create({
 </script>
 
 
-<style type="text/css" lang="scss"    >
+<style type="text/css" lang="scss">
 	.simple-groupform{
 		margin-bottom: 28px;
 		$p:&;
