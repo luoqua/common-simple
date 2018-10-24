@@ -17,3 +17,8 @@ export function getSignature() {
 export function upload(formData) {
 	return axios.trdapi(aliUrl,formData)
 }
+
+// 测试的获取轮播图接口
+export function getImg() {
+	return axios.get('/packages/utils/imgurl.json')
+}

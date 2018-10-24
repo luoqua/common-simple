@@ -8,6 +8,7 @@ import '@/styles/common/transition.scss'
 import { fetchPermission } from '@/api/permission'
 import UserToken,{ store, recursionRouter } from '@/store/store'
 import DynamicRoutes,{dynamicRoutes} from '@/router/index_init'
+import createStore from '@/store'
 
 import Vue from 'vue'
 import App from './App'
@@ -70,3 +71,16 @@ new Vue({
 	components: { App },
 	template: '<App/>'
 })
+
+
+// 导出一个工厂函数，用于创建新的vue实例
+export default function createApp() {
+	const store = createStore()
+	const app = new Vue({
+		router,
+		store,
+		render: h => h(App)
+	})
+
+	return app
+}
