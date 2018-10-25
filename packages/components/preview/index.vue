@@ -9,11 +9,10 @@
 
 
 <script type="text/javascript">
-import create from '@/utils/create'
 import Swipe from '@/components/swipe'
 import swipeItem from '@/components/swipe-item'
 
-export default create({
+export default {
 	name: 'preview-page',
 	props: [],
 	data() {
@@ -36,7 +35,7 @@ export default create({
 	methods: {
 
 	}
-})
+}
 </script>
 
 

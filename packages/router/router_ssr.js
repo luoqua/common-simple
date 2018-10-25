@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import textTitle from '@/components/text_title/demo'
+import textTitle from '@/components/preview'
 import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)

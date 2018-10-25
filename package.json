@@ -13,7 +13,9 @@
     "lint": "eslint --ext .js,.vue src test/unit test/e2e/specs",
     "build": "node build/build.js",
     "lint-fix": "eslint --fix packages/*.vue",
-    "file": "node build/bin/build-entry.js"
+    "file": "node build/bin/build-entry.js",
+    "server": "webpack --config ./webpack/webpack.server.js",
+    "client": "webpack --config ./webpack/webpack.client.js"
   },
   "dependencies": {
     "axios": "^0.18.0",

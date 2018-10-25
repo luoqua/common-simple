@@ -17,11 +17,15 @@ const renderer = require('vue-server-renderer').createRenderer()
 const createApp = require('./dist/bundle.server.js')['default']
 
 // 客户端打包地址
-// const clientBundleFileUrl = '/bundle.client.js'
+const clientBundleFileUrl = '/bundle.client.js'
 
 
 express.get('/test',(req,res) => {
+
+	const context = { url: req.url }
+
 	createApp(context).then(app => {
+
 		let state = JSON.stringify(context.state)
 
 		renderer.renderToString(app, (err, html) => {
@@ -45,6 +49,7 @@ express.get('/test',(req,res) => {
 				<meta name="keywords" content="">
 				<script type="text/javascript" src="/packages/utils/flexible.js"></script>
 				<script>window.__INTIAL_STATE__ = ${state}</script>
+				<script src="${clientBundleFileUrl}"></script>
 				</head>
 				<body>
 					<div id="app">${html}</div>
