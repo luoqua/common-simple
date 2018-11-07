@@ -11,8 +11,8 @@ export default function createStore() {
 		},
 		actions: {
 			getimgUrls({ commit }) {
-				return getImg().then((res) => {
-					commit('imgUrls',res.data)
+				return getImg().then((data) => {
+					commit('setimgUrls',data)
 				})
 			}
 		},

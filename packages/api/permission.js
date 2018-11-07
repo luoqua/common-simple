@@ -20,5 +20,5 @@ export function upload(formData) {
 
 // 测试的获取轮播图接口
 export function getImg() {
-	return axios.get('/packages/utils/imgurl.json')
+	return axios.get('/api/getImgurl')
 }

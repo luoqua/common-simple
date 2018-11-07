@@ -5,11 +5,11 @@ import App from './App'
 import createStore from './store/index.js'
 
 export default function createApp() {
-	const store2 = createStore()
+	const store = createStore()
 	const router = createRouter()
 	const app = new Vue({
 		router,
-		store2,
+		store,
 		render: h => h(App)
 	})
 

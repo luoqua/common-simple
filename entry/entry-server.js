@@ -15,19 +15,14 @@ export default context => {
 			return reject({code: 404})
 		}
 
-		console.log(matchedComponents.serverRequest)
-		/*// 遍历路由下所有的组件，如果有需要服务端渲染的请求，则进行请求
-		matchedComponents.serverRequest(app.$store)
-			.then(() => {
-				try {
-					console.log(app.$store.state)
-					// context.state = app.$store.state
-					resolve(app)
-				} catch (err) {
-					console.log(err)
-				}
-
-			}).catch(reject)*/
+		Promise.all(matchedComponents.map(component => {
+			if (component.serverRequest) {
+				return component.serverRequest(app.$store)
+			}
+		})).then(() => {
+			context.state = app.$store.state
+			resolve(app)
+		}).catch(reject)
 
 	})
 }

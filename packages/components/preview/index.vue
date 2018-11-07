@@ -1,8 +1,8 @@
 <template>
 	<swipe>
-		<swipe_item	v-for="(image, index) in images" :key="index">
+		<swipe-item	v-for="(image, index) in images" :key="index">
 			<img :src="image" style="width:100%;height:200px">
-		</swipe_item>
+		</swipe-item>
 	</swipe>
 </template>
 

@@ -27,6 +27,18 @@ module.exports = {
 		        test: /\.js$/,
 		        loader: 'babel-loader',
 		        include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')]
+		    },
+		    {
+		        test: /\.(css|scss)$/,
+		        include: [
+		          /src/,// 表示在src目录下的css需要编译
+		          '/node_modules/element-ui/lib/' // 增加此项
+		        ],
+		        use: [
+		          'style-loader',
+		          'css-loader',
+		          'sass-loader'
+		        ]
 		    }
 		]
 	},
